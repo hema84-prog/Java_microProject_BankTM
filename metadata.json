@@ -1,0 +1,6 @@
+{
+  "name": "BankTM",
+  "description": "BankTM – Banking Made Simple for Everyone. Unified digital banking platform with customer and admin portals, multilingual support, account operations, card services, and Indian government schemes.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
