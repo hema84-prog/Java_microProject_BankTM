@@ -58,21 +58,21 @@ export const SmartLoanFinder: React.FC = () => {
     { name: 'KCC Crop Loan (4.0%)', amount: 300000, rate: 4.0, tenure: 3, cat: 'Agriculture' },
     { name: 'Mudra Kishore (8.5%)', amount: 500000, rate: 8.5, tenure: 5, cat: 'MSME' },
     { name: 'Vidya Lakshmi Student Loan (8.25%)', amount: 750000, rate: 8.25, tenure: 7, cat: 'Education' },
-    { name: 'PM SVANidhi Vendor (7.0% Subsidized)', amount: 50000, rate: 7.0, tenure: 2, cat: 'Street Vendor' },
-    { name: 'Stand-Up India (8.75%)', amount: 2500000, rate: 8.75, tenure: 7, cat: 'Women Enterprise' },
+    { name: 'PM SVANidhi Street Vendor (7.0%)', amount: 50000, rate: 7.0, tenure: 1, cat: 'Micro' },
+    { name: 'Stand-Up India Green Field (9.0%)', amount: 2500000, rate: 9.0, tenure: 7, cat: 'Women/SC/ST' },
+    { name: 'PMEGP Subsidy Project (9.5%)', amount: 1500000, rate: 9.5, tenure: 5, cat: 'Manufacturing' },
   ];
 
-  // Mathematical EMI Calculation
+  // EMI Math Calculation
   const calculateEMI = () => {
     const P = loanAmount;
-    const r = interestRate / 12 / 100;
-    const n = tenureYears * 12;
+    const r = interestRate / 12 / 100; // Monthly interest rate
+    const n = tenureYears * 12; // Total months
 
-    if (r === 0) {
-      const emi = P / n;
+    if (P <= 0 || r <= 0 || n <= 0) {
       return {
-        monthlyEMI: emi,
-        totalPayment: P,
+        monthlyEMI: 0,
+        totalPayment: 0,
         totalInterest: 0,
         principalPercent: 100,
         interestPercent: 0,
@@ -124,10 +124,10 @@ export const SmartLoanFinder: React.FC = () => {
 
   return (
     <div className="space-y-6 max-w-5xl">
-      {/* Header Banner */}
-      <div className="bg-white rounded-2xl border border-slate-200/90 p-6 sm:p-7 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
+      {/* Header */}
+      <div className="bg-white rounded-2xl border border-slate-200/90 p-6 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <div className="flex items-center gap-2 text-xs font-semibold text-[#002C6C] uppercase tracking-wider">
+          <div className="flex items-center gap-2 text-xs font-semibold text-[#2563EB] uppercase tracking-wider">
             <Compass className="w-4 h-4" />
             <span>Smart Credit Advisory & EMI Simulation</span>
           </div>
@@ -140,30 +140,30 @@ export const SmartLoanFinder: React.FC = () => {
         </div>
 
         {/* Mode Switcher Tabs */}
-        <div className="flex items-center gap-1.5 bg-slate-100 p-1.5 rounded-xl border border-slate-200 self-start md:self-auto shrink-0">
+        <div className="flex items-center gap-1.5 bg-slate-100 p-1.5 rounded-xl self-start md:self-auto shrink-0">
           <button
             type="button"
             onClick={() => setActiveMode('calculator')}
-            className={`flex items-center gap-1.5 px-4 py-2 text-xs font-bold rounded-lg transition-all ${
+            className={`flex items-center gap-1.5 px-4 py-2 text-xs font-bold rounded-lg transition-all cursor-pointer ${
               activeMode === 'calculator'
-                ? 'bg-[#002C6C] text-white shadow-xs'
+                ? 'bg-[#142B4A] text-white shadow-xs'
                 : 'text-slate-600 hover:text-slate-900'
             }`}
           >
-            <Calculator className="w-3.5 h-3.5" />
+            <Calculator className="w-3.5 h-3.5 text-amber-300" />
             <span>EMI Calculator</span>
           </button>
 
           <button
             type="button"
             onClick={() => setActiveMode('finder')}
-            className={`flex items-center gap-1.5 px-4 py-2 text-xs font-bold rounded-lg transition-all ${
+            className={`flex items-center gap-1.5 px-4 py-2 text-xs font-bold rounded-lg transition-all cursor-pointer ${
               activeMode === 'finder'
-                ? 'bg-[#002C6C] text-white shadow-xs'
+                ? 'bg-[#142B4A] text-white shadow-xs'
                 : 'text-slate-600 hover:text-slate-900'
             }`}
           >
-            <Sparkles className="w-3.5 h-3.5" />
+            <Sparkles className="w-3.5 h-3.5 text-blue-300" />
             <span>Scheme Matcher</span>
           </button>
         </div>
@@ -174,7 +174,7 @@ export const SmartLoanFinder: React.FC = () => {
         <div className="space-y-6">
           {/* Quick Preset Buttons */}
           <div className="bg-white rounded-2xl border border-slate-200/90 p-5 shadow-xs space-y-3">
-            <span className="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
+            <span className="text-xs font-bold text-[#142B4A] uppercase tracking-wider flex items-center gap-1.5">
               <Sparkles className="w-3.5 h-3.5 text-[#2563EB]" />
               <span>Select Government Scheme Rate Preset:</span>
             </span>
@@ -189,14 +189,14 @@ export const SmartLoanFinder: React.FC = () => {
                     setInterestRate(preset.rate);
                     setTenureYears(preset.tenure);
                   }}
-                  className={`p-3 rounded-xl border text-left transition-all ${
+                  className={`p-3 rounded-xl border text-left transition-all cursor-pointer ${
                     loanAmount === preset.amount && interestRate === preset.rate
-                      ? 'border-[#002C6C] bg-blue-50/70 ring-2 ring-[#002C6C]/20 shadow-xs'
+                      ? 'border-[#2563EB] bg-blue-50/60 ring-2 ring-blue-500/20'
                       : 'border-slate-200 hover:border-slate-300 bg-white'
                   }`}
                 >
                   <div className="font-bold text-xs text-[#142B4A]">{preset.name}</div>
-                  <div className="text-[11px] text-slate-500 mt-0.5">
+                  <div className="text-[11px] text-slate-500 mt-0.5 font-mono">
                     ₹{preset.amount.toLocaleString('en-IN')} · {preset.tenure} Years
                   </div>
                 </button>
@@ -209,8 +209,8 @@ export const SmartLoanFinder: React.FC = () => {
             
             {/* Left 7 Cols: Sliders & Controls */}
             <div className="lg:col-span-7 bg-white rounded-2xl border border-slate-200/90 p-6 sm:p-7 shadow-xs space-y-6">
-              <h3 className="font-extrabold text-base text-[#142B4A] flex items-center gap-2 border-b border-slate-100 pb-3">
-                <Calculator className="w-4 h-4 text-[#002C6C]" />
+              <h3 className="font-bold text-base text-[#142B4A] flex items-center gap-2 border-b border-slate-100 pb-3">
+                <Calculator className="w-4 h-4 text-[#2563EB]" />
                 <span>Adjust Loan Parameters</span>
               </h3>
 
@@ -218,337 +218,347 @@ export const SmartLoanFinder: React.FC = () => {
               <div className="space-y-2">
                 <div className="flex items-center justify-between text-xs">
                   <span className="font-bold text-slate-700">Loan Amount (Principal)</span>
-                  <div className="flex items-center gap-1 font-mono font-bold text-base text-[#002C6C] bg-blue-50 px-3 py-1 rounded-lg border border-blue-200">
+                  <div className="flex items-center gap-1 bg-slate-50 px-2.5 py-1 rounded-lg border border-slate-200 font-mono font-bold text-[#142B4A]">
                     <span>₹</span>
-                    <span>{loanAmount.toLocaleString('en-IN')}</span>
+                    <input
+                      type="number"
+                      min={10000}
+                      max={10000000}
+                      step={10000}
+                      value={loanAmount}
+                      onChange={(e) => setLoanAmount(Math.max(10000, Number(e.target.value)))}
+                      className="w-28 text-right bg-transparent focus:outline-none"
+                    />
                   </div>
                 </div>
-
                 <input
                   type="range"
-                  min="10000"
-                  max="5000000"
-                  step="10000"
+                  min={10000}
+                  max={5000000}
+                  step={10000}
                   value={loanAmount}
                   onChange={(e) => setLoanAmount(Number(e.target.value))}
-                  className="w-full accent-[#002C6C] h-2 bg-slate-200 rounded-lg cursor-pointer"
+                  className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-[#2563EB]"
                 />
-
-                <div className="flex justify-between text-[11px] text-slate-400 font-mono">
-                  <span>₹10,000 (Mudra Shishu)</span>
+                <div className="flex justify-between text-[10px] text-slate-400 font-mono">
+                  <span>₹10,000</span>
                   <span>₹25,00,000</span>
-                  <span>₹50,00,000 (PMEGP Max)</span>
+                  <span>₹50,00,000</span>
                 </div>
               </div>
 
-              {/* Slider 2: Annual Interest Rate */}
-              <div className="space-y-2 pt-2">
+              {/* Slider 2: Interest Rate */}
+              <div className="space-y-2">
                 <div className="flex items-center justify-between text-xs">
                   <span className="font-bold text-slate-700">Annual Interest Rate (% p.a.)</span>
-                  <div className="font-mono font-bold text-base text-emerald-800 bg-emerald-50 px-3 py-1 rounded-lg border border-emerald-200">
-                    {interestRate.toFixed(2)}%
+                  <div className="flex items-center gap-1 bg-slate-50 px-2.5 py-1 rounded-lg border border-slate-200 font-mono font-bold text-[#142B4A]">
+                    <input
+                      type="number"
+                      min={1.0}
+                      max={25.0}
+                      step={0.25}
+                      value={interestRate}
+                      onChange={(e) => setInterestRate(Math.max(1, Number(e.target.value)))}
+                      className="w-16 text-right bg-transparent focus:outline-none"
+                    />
+                    <span>%</span>
                   </div>
                 </div>
-
                 <input
                   type="range"
-                  min="3.0"
-                  max="16.0"
-                  step="0.25"
+                  min={1.0}
+                  max={18.0}
+                  step={0.25}
                   value={interestRate}
                   onChange={(e) => setInterestRate(Number(e.target.value))}
-                  className="w-full accent-emerald-600 h-2 bg-slate-200 rounded-lg cursor-pointer"
+                  className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-emerald-600"
                 />
-
-                <div className="flex justify-between text-[11px] text-slate-400 font-mono">
-                  <span>3.0% (Subsidized)</span>
-                  <span>4.0% (KCC Farm)</span>
-                  <span>8.5% (Mudra)</span>
-                  <span>16.0% (Unsecured)</span>
+                <div className="flex justify-between text-[10px] text-slate-400 font-mono">
+                  <span>1.0% (Subsidized)</span>
+                  <span>8.5% (Standard)</span>
+                  <span>18.0%</span>
                 </div>
               </div>
 
               {/* Slider 3: Loan Tenure */}
-              <div className="space-y-2 pt-2">
+              <div className="space-y-2">
                 <div className="flex items-center justify-between text-xs">
-                  <span className="font-bold text-slate-700">Loan Repayment Tenure</span>
-                  <div className="font-mono font-bold text-base text-slate-800 bg-slate-100 px-3 py-1 rounded-lg border border-slate-200">
-                    {tenureYears} Years ({tenureYears * 12} Months)
+                  <span className="font-bold text-slate-700">Tenure (Years)</span>
+                  <div className="flex items-center gap-1 bg-slate-50 px-2.5 py-1 rounded-lg border border-slate-200 font-mono font-bold text-[#142B4A]">
+                    <input
+                      type="number"
+                      min={1}
+                      max={30}
+                      value={tenureYears}
+                      onChange={(e) => setTenureYears(Math.max(1, Number(e.target.value)))}
+                      className="w-12 text-right bg-transparent focus:outline-none"
+                    />
+                    <span>Yrs</span>
                   </div>
                 </div>
-
                 <input
                   type="range"
-                  min="1"
-                  max="15"
-                  step="1"
+                  min={1}
+                  max={20}
+                  step={1}
                   value={tenureYears}
                   onChange={(e) => setTenureYears(Number(e.target.value))}
-                  className="w-full accent-slate-700 h-2 bg-slate-200 rounded-lg cursor-pointer"
+                  className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-[#142B4A]"
                 />
-
-                <div className="flex justify-between text-[11px] text-slate-400 font-mono">
-                  <span>1 Year</span>
-                  <span>5 Years (Standard)</span>
+                <div className="flex justify-between text-[10px] text-slate-400 font-mono">
+                  <span>1 Year ({12} Mos)</span>
                   <span>10 Years</span>
-                  <span>15 Years (Education)</span>
+                  <span>20 Years ({240} Mos)</span>
                 </div>
+              </div>
+
+              {/* Tenure Quick Buttons */}
+              <div className="flex items-center gap-1.5 pt-2">
+                <span className="text-[11px] text-slate-500 mr-1">Quick Select:</span>
+                {[1, 3, 5, 7, 10, 15].map(y => (
+                  <button
+                    key={y}
+                    type="button"
+                    onClick={() => setTenureYears(y)}
+                    className={`px-2.5 py-1 rounded-md text-xs font-mono font-semibold border transition-colors cursor-pointer ${
+                      tenureYears === y
+                        ? 'bg-[#142B4A] text-white border-[#142B4A]'
+                        : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100'
+                    }`}
+                  >
+                    {y}Y
+                  </button>
+                ))}
               </div>
             </div>
 
-            {/* Right 5 Cols: Visual EMI Display & Payment Breakdown */}
-            <div className="lg:col-span-5 bg-linear-to-b from-[#002C6C] to-[#0A1A2F] rounded-2xl text-white p-6 sm:p-7 shadow-xl space-y-6 flex flex-col justify-between">
-              <div className="space-y-4">
-                <span className="text-[11px] font-mono tracking-widest text-blue-200 uppercase block">
-                  Computed Repayment Summary
+            {/* Right 5 Cols: Visual EMI Breakdown Card */}
+            <div className="lg:col-span-5 bg-gradient-to-br from-[#142B4A] to-[#0A192F] text-white rounded-2xl p-6 sm:p-7 shadow-lg flex flex-col justify-between space-y-6">
+              <div>
+                <span className="text-xs uppercase tracking-wider text-blue-200 font-semibold flex items-center gap-1.5">
+                  <TrendingUp className="w-4 h-4 text-emerald-400" />
+                  Estimated Monthly Repayment
                 </span>
-
-                {/* Big EMI Highlight Box */}
-                <div className="p-4 bg-white/10 backdrop-blur-xs rounded-xl border border-white/15 space-y-1">
-                  <span className="text-xs text-blue-200">Monthly Installment (EMI)</span>
-                  <div className="text-3xl sm:text-4xl font-extrabold font-mono text-white tabular-nums tracking-tight">
+                
+                <div className="mt-3">
+                  <div className="text-3xl sm:text-4xl font-extrabold font-mono tracking-tight text-white">
                     ₹{emiData.monthlyEMI.toLocaleString('en-IN')}
+                    <span className="text-sm font-normal text-blue-200"> / month</span>
                   </div>
-                  <span className="text-[11px] text-blue-300 block">per month for {tenureYears * 12} installments</span>
+                  <p className="text-[11px] text-blue-200 mt-1">
+                    Equated Monthly Installment for {tenureYears * 12} continuous months
+                  </p>
                 </div>
 
-                {/* Principal & Total Interest Breakdown */}
-                <div className="grid grid-cols-2 gap-3 text-xs">
-                  <div className="p-3 bg-white/5 rounded-xl border border-white/10">
-                    <span className="text-slate-300 block text-[11px]">Total Interest</span>
-                    <span className="font-mono font-bold text-base text-amber-300 block mt-0.5">
-                      ₹{emiData.totalInterest.toLocaleString('en-IN')}
-                    </span>
+                {/* Progress bar split */}
+                <div className="mt-6 space-y-2">
+                  <div className="flex justify-between text-xs font-semibold">
+                    <span className="text-emerald-400">Principal: {emiData.principalPercent}%</span>
+                    <span className="text-amber-300">Interest: {emiData.interestPercent}%</span>
                   </div>
-
-                  <div className="p-3 bg-white/5 rounded-xl border border-white/10">
-                    <span className="text-slate-300 block text-[11px]">Total Repayment</span>
-                    <span className="font-mono font-bold text-base text-emerald-300 block mt-0.5">
-                      ₹{emiData.totalPayment.toLocaleString('en-IN')}
-                    </span>
-                  </div>
-                </div>
-
-                {/* Visual Proportion Bar (Principal vs Interest) */}
-                <div className="space-y-1.5 pt-2">
-                  <div className="flex justify-between text-[11px] text-blue-200">
-                    <span>Principal: {emiData.principalPercent}%</span>
-                    <span>Interest: {emiData.interestPercent}%</span>
-                  </div>
-
-                  <div className="w-full h-3 bg-amber-400 rounded-full overflow-hidden flex">
+                  <div className="w-full h-3 rounded-full bg-white/10 overflow-hidden flex">
                     <div 
                       className="bg-emerald-400 h-full transition-all duration-300"
                       style={{ width: `${emiData.principalPercent}%` }}
                     />
+                    <div 
+                      className="bg-amber-400 h-full transition-all duration-300"
+                      style={{ width: `${emiData.interestPercent}%` }}
+                    />
+                  </div>
+                </div>
+
+                {/* Breakdown List */}
+                <div className="mt-6 space-y-3 divide-y divide-white/10 text-xs">
+                  <div className="flex justify-between pt-2">
+                    <span className="text-blue-200">Principal Loan Amount</span>
+                    <span className="font-mono font-bold text-white">
+                      ₹{loanAmount.toLocaleString('en-IN')}
+                    </span>
+                  </div>
+                  <div className="flex justify-between pt-2">
+                    <span className="text-blue-200">Total Interest Payable</span>
+                    <span className="font-mono font-bold text-amber-300">
+                      ₹{emiData.totalInterest.toLocaleString('en-IN')}
+                    </span>
+                  </div>
+                  <div className="flex justify-between pt-2">
+                    <span className="text-blue-200">Total Amount Payable</span>
+                    <span className="font-mono font-extrabold text-emerald-300 text-sm">
+                      ₹{emiData.totalPayment.toLocaleString('en-IN')}
+                    </span>
                   </div>
                 </div>
               </div>
 
-              {/* Action Button: Explore Scheme Details */}
-              <button
-                type="button"
-                onClick={() => setActiveCustomerTab('schemes')}
-                className="w-full py-3 bg-white text-[#002C6C] hover:bg-blue-50 font-bold text-xs rounded-xl transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer mt-4"
-              >
-                <span>Browse Matching Government Schemes</span>
-                <ArrowRight className="w-4 h-4" />
-              </button>
+              {/* Action Link to Government Schemes */}
+              <div className="pt-4 border-t border-white/10 space-y-2">
+                <button
+                  type="button"
+                  onClick={() => setActiveCustomerTab('schemes')}
+                  className="w-full py-2.5 text-xs font-bold text-[#142B4A] bg-white hover:bg-blue-50 rounded-xl transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer"
+                >
+                  <span>Explore Subsidized Government Schemes</span>
+                  <ArrowRight className="w-3.5 h-3.5 text-[#2563EB]" />
+                </button>
+                <div className="text-[10px] text-blue-200 text-center flex items-center justify-center gap-1">
+                  <ShieldCheck className="w-3 h-3 text-emerald-400" />
+                  Official subsidized schemes can reduce your effective interest rate down to 4.0%
+                </div>
+              </div>
             </div>
-
           </div>
         </div>
       )}
 
-      {/* MODE 2: SCHEME MATCHER WIZARD */}
+      {/* MODE 2: ORIGINAL CITIZEN PROFILE SCHEME MATCHER */}
       {activeMode === 'finder' && (
         <div className="space-y-6">
-          {/* Step 1: Select Profile */}
-          <div className="bg-white rounded-2xl border border-slate-200/90 p-6 shadow-xs space-y-4">
-            <div className="flex items-center justify-between">
-              <h3 className="text-sm font-bold text-[#142B4A]">
-                1. {t.whoAreYou}
-              </h3>
-              <span className="text-[11px] text-slate-400">Step 1 of 2</span>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-              {profileOptions.map((opt) => {
-                const isSelected = profileCategory === opt.id;
-                return (
-                  <div
-                    key={opt.id}
-                    onClick={() => { setProfileCategory(opt.id); setHasSearched(false); }}
-                    className={`p-4 rounded-xl border cursor-pointer transition-all ${
-                      isSelected
-                        ? 'border-[#002C6C] bg-blue-50/50 ring-2 ring-[#002C6C]/20 shadow-xs'
+          <div className="bg-white rounded-2xl border border-slate-200/90 p-6 shadow-xs space-y-6">
+            {/* Step 1: Profile Category */}
+            <div>
+              <label className="block text-xs font-bold text-slate-800 uppercase tracking-wider mb-2">
+                1. Select Citizen Profile
+              </label>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                {profileOptions.map(p => (
+                  <button
+                    key={p.id}
+                    type="button"
+                    onClick={() => setProfileCategory(p.id)}
+                    className={`p-3.5 rounded-xl border text-left transition-all cursor-pointer ${
+                      profileCategory === p.id 
+                        ? 'border-[#2563EB] bg-blue-50/70 ring-2 ring-blue-500/20' 
                         : 'border-slate-200 hover:border-slate-300 bg-white'
                     }`}
                   >
                     <div className="flex items-center justify-between">
-                      <span className="font-bold text-xs text-[#142B4A]">{opt.title}</span>
-                      {isSelected && <Check className="w-4 h-4 text-[#002C6C]" />}
+                      <span className="font-bold text-xs text-[#142B4A]">{p.title}</span>
+                      {profileCategory === p.id && (
+                        <div className="w-4 h-4 rounded-full bg-[#2563EB] text-white flex items-center justify-center text-[10px]">
+                          ✓
+                        </div>
+                      )}
                     </div>
-                    <p className="text-[11px] text-slate-500 mt-1.5 leading-relaxed">
-                      {opt.desc}
-                    </p>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* Step 2: Purpose & Scope */}
-          <div className="bg-white rounded-2xl border border-slate-200/90 p-6 shadow-xs space-y-4">
-            <div className="flex items-center justify-between">
-              <h3 className="text-sm font-bold text-[#142B4A]">
-                2. {t.loanPurpose}
-              </h3>
-              <span className="text-[11px] text-slate-400">Step 2 of 2</span>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {purposeOptions.map((pur) => {
-                const isSelected = purpose === pur.id;
-                return (
-                  <div
-                    key={pur.id}
-                    onClick={() => { setPurpose(pur.id); setHasSearched(false); }}
-                    className={`p-3.5 rounded-lg border cursor-pointer transition-all flex items-center justify-between ${
-                      isSelected
-                        ? 'border-[#002C6C] bg-blue-50/50 ring-1 ring-[#002C6C]'
-                        : 'border-slate-200 hover:border-slate-300 bg-white'
-                    }`}
-                  >
-                    <span className="text-xs font-semibold text-[#142B4A]">{pur.label}</span>
-                    {isSelected && <Check className="w-3.5 h-3.5 text-[#002C6C]" />}
-                  </div>
-                );
-              })}
-            </div>
-
-            {/* Scope Selector */}
-            <div className="pt-2 flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-t border-slate-100">
-              <span className="text-xs text-slate-600 font-medium">Scheme Origin Preference:</span>
-              <div className="flex items-center gap-1.5 bg-slate-100 p-1 rounded-lg">
-                <button
-                  type="button"
-                  onClick={() => { setSchemeScope('all'); setHasSearched(false); }}
-                  className={`px-3 py-1 text-xs font-medium rounded-md transition-all ${
-                    schemeScope === 'all' ? 'bg-white text-[#142B4A] font-semibold shadow-xs' : 'text-slate-600'
-                  }`}
-                >
-                  All Central & State
-                </button>
-                <button
-                  type="button"
-                  onClick={() => { setSchemeScope('central'); setHasSearched(false); }}
-                  className={`px-3 py-1 text-xs font-medium rounded-md transition-all ${
-                    schemeScope === 'central' ? 'bg-white text-[#142B4A] font-semibold shadow-xs' : 'text-slate-600'
-                  }`}
-                >
-                  Central Schemes Only
-                </button>
-                <button
-                  type="button"
-                  onClick={() => { setSchemeScope('karnataka'); setHasSearched(false); }}
-                  className={`px-3 py-1 text-xs font-medium rounded-md transition-all ${
-                    schemeScope === 'karnataka' ? 'bg-white text-[#142B4A] font-semibold shadow-xs' : 'text-slate-600'
-                  }`}
-                >
-                  Karnataka State Only
-                </button>
+                    <p className="text-[11px] text-slate-500 mt-1 leading-snug">{p.desc}</p>
+                  </button>
+                ))}
               </div>
             </div>
 
-            {/* Discover Button */}
-            <div className="pt-2">
+            {/* Step 2: Purpose */}
+            <div>
+              <label className="block text-xs font-bold text-slate-800 uppercase tracking-wider mb-2">
+                2. Credit / Assistance Purpose
+              </label>
+              <div className="flex flex-wrap gap-2">
+                {purposeOptions.map(pur => (
+                  <button
+                    key={pur.id}
+                    type="button"
+                    onClick={() => setPurpose(pur.id)}
+                    className={`px-3.5 py-1.5 text-xs font-semibold rounded-lg border transition-all cursor-pointer ${
+                      purpose === pur.id
+                        ? 'bg-[#142B4A] text-white border-[#142B4A] shadow-xs'
+                        : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
+                    }`}
+                  >
+                    {pur.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Step 3: Geographic Scope */}
+            <div>
+              <label className="block text-xs font-bold text-slate-800 uppercase tracking-wider mb-2">
+                3. Jurisdiction / Geographic Scope
+              </label>
+              <div className="flex items-center gap-2">
+                {[
+                  { id: 'all', label: 'All Schemes (Central + Karnataka)' },
+                  { id: 'central', label: 'Central Government Only' },
+                  { id: 'karnataka', label: 'Karnataka State Schemes Only' },
+                ].map(scope => (
+                  <button
+                    key={scope.id}
+                    type="button"
+                    onClick={() => setSchemeScope(scope.id as any)}
+                    className={`px-3 py-1.5 text-xs font-semibold rounded-lg border transition-all cursor-pointer ${
+                      schemeScope === scope.id
+                        ? 'bg-[#2563EB] text-white border-[#2563EB]'
+                        : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
+                    }`}
+                  >
+                    {scope.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
+              <span className="text-xs text-slate-500">
+                Found <strong>{matchedSchemes.length}</strong> matching government schemes
+              </span>
               <button
                 type="button"
                 onClick={handleMatch}
-                className="flex items-center gap-2 px-6 py-2.5 text-xs font-bold text-white bg-[#002C6C] hover:bg-[#003B95] rounded-xl transition-all shadow-xs cursor-pointer"
+                className="px-6 py-2.5 text-xs font-bold text-white bg-[#142B4A] hover:bg-[#1E3A8A] rounded-xl transition-all shadow-md flex items-center gap-2 cursor-pointer"
               >
                 <Sparkles className="w-4 h-4 text-amber-300" />
-                <span>{t.findMatchingSchemes}</span>
+                <span>Find Tailored Schemes</span>
               </button>
             </div>
           </div>
 
-          {/* Results Section */}
+          {/* Search Results */}
           {hasSearched && (
-            <div className="space-y-4 animate-in fade-in duration-200">
-              <div className="flex items-center justify-between">
-                <h3 className="text-sm font-bold text-[#142B4A] flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                  <span>{t.matchingSchemesFound} ({matchedSchemes.length})</span>
-                </h3>
-                <span className="text-xs text-slate-400">
-                  Personalized based on selected criteria
-                </span>
-              </div>
-
-              {matchedSchemes.length === 0 ? (
-                <div className="bg-white rounded-xl p-8 text-center text-xs text-slate-500 border border-slate-200">
-                  {t.noSchemesMatched}
-                </div>
-              ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {matchedSchemes.map((scheme) => (
-                    <div
-                      key={scheme.id}
-                      className="bg-white rounded-2xl border border-slate-200/90 p-5 shadow-xs flex flex-col justify-between space-y-4 hover:border-slate-300 transition-colors"
-                    >
-                      <div className="space-y-2.5">
-                        <div className="flex items-center justify-between">
-                          <span className="text-[10px] font-bold text-[#002C6C] bg-blue-50 px-2 py-0.5 rounded-sm">
-                            {scheme.categoryLabel}
-                          </span>
-                          {scheme.isStateScheme && (
-                            <span className="text-[10px] font-semibold text-amber-800 bg-amber-50 px-2 py-0.5 rounded-sm border border-amber-200">
-                              {scheme.state} Scheme
-                            </span>
-                          )}
-                        </div>
-
-                        <h4 className="font-bold text-base text-[#142B4A]">
-                          {scheme.title}
-                        </h4>
-
-                        <div className="p-2.5 bg-emerald-50 rounded-lg text-xs text-emerald-950 font-bold border border-emerald-200">
-                          {scheme.loanOrSubsidyAmount || scheme.financialBenefits}
-                        </div>
-
-                        <p className="text-xs text-slate-600 line-clamp-3 leading-relaxed">
-                          {scheme.description}
-                        </p>
-
-                        <div className="text-[11px] text-slate-500">
-                          <strong>Documents:</strong> {scheme.requiredDocuments.slice(0, 3).join(', ')}
-                        </div>
-                      </div>
-
-                      <div className="pt-3 border-t border-slate-100 flex items-center justify-between">
-                        <button
-                          type="button"
-                          onClick={() => setActiveCustomerTab('schemes')}
-                          className="text-xs font-bold text-[#002C6C] hover:underline"
-                        >
-                          View Full Details
-                        </button>
-                        <a
-                          href={scheme.officialPortalUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-white bg-[#002C6C] hover:bg-[#003B95] rounded-lg transition-colors shadow-xs"
-                        >
-                          <span>Apply on Official Portal</span>
-                          <ExternalLink className="w-3.5 h-3.5" />
-                        </a>
-                      </div>
+            <div className="space-y-4">
+              <h3 className="text-base font-bold text-[#142B4A]">
+                Recommended Schemes For Your Profile ({matchedSchemes.length})
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {matchedSchemes.map(scheme => (
+                  <div key={scheme.id} className="bg-white rounded-2xl border border-slate-200/90 p-5 shadow-xs space-y-3">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[10px] font-bold text-[#2563EB] bg-blue-50 px-2 py-0.5 rounded border border-blue-200">
+                        {scheme.categoryLabel}
+                      </span>
+                      {scheme.isStateScheme && (
+                        <span className="text-[10px] font-bold text-amber-800 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-200">
+                          Karnataka
+                        </span>
+                      )}
                     </div>
-                  ))}
-                </div>
-              )}
+                    <div>
+                      <h4 className="font-extrabold text-sm text-[#142B4A]">{scheme.title}</h4>
+                      <p className="text-xs text-slate-500 mt-0.5">{scheme.department}</p>
+                    </div>
+                    <div className="p-2.5 rounded-lg bg-emerald-50 text-emerald-950 font-mono font-bold text-xs border border-emerald-200">
+                      {scheme.loanOrSubsidyAmount || scheme.financialBenefits}
+                    </div>
+                    <p className="text-xs text-slate-600 line-clamp-2">{scheme.description}</p>
+                    <div className="pt-2 border-t border-slate-100 flex items-center justify-between">
+                      <button
+                        type="button"
+                        onClick={() => setActiveCustomerTab('schemes')}
+                        className="text-xs font-bold text-[#2563EB] hover:underline"
+                      >
+                        View Full Dossier
+                      </button>
+                      <a
+                        href={scheme.officialPortalUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-1 text-xs font-bold text-[#142B4A] hover:underline"
+                      >
+                        <span>Apply</span>
+                        <ExternalLink className="w-3 h-3 text-[#2563EB]" />
+                      </a>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           )}
         </div>

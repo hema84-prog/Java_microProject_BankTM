@@ -9,25 +9,25 @@ import {
   ExternalLink, 
   PlusCircle,
   Eye,
-  CheckCircle2,
-  Clock,
-  ChevronRight,
-  Volume2,
-  VolumeX,
-  Copy,
-  Lock,
-  Unlock,
-  Sparkles,
-  TrendingUp,
-  Send,
-  ShieldCheck,
-  Check,
-  Search,
-  Building2,
-  Calculator,
-  IndianRupee,
-  FileText,
-  ArrowRight
+  CheckCircle2, 
+  Clock, 
+  ChevronRight, 
+  Volume2, 
+  VolumeX, 
+  Copy, 
+  Lock, 
+  Unlock, 
+  Sparkles, 
+  TrendingUp, 
+  Send, 
+  ShieldCheck, 
+  Check, 
+  Search, 
+  Building2, 
+  Calculator, 
+  IndianRupee, 
+  FileText, 
+  ArrowRight 
 } from 'lucide-react';
 import { useBanking } from '../../context/BankingContext';
 import { speakText, stopSpeech } from '../../utils/speech';
@@ -157,7 +157,7 @@ export const CustomerDashboard: React.FC = () => {
             <button
               type="button"
               onClick={handleCopyAcc}
-              className="text-[11px] text-[#2563EB] hover:underline flex items-center gap-1 font-mono"
+              className="text-[11px] text-[#2563EB] hover:underline flex items-center gap-1 font-mono cursor-pointer"
             >
               {copiedAcc ? <Check className="w-3 h-3 text-emerald-600" /> : <Copy className="w-3 h-3" />}
               <span>{copiedAcc ? 'Copied' : primaryAccount?.accountNumber}</span>
@@ -178,7 +178,7 @@ export const CustomerDashboard: React.FC = () => {
           <button
             type="button"
             onClick={handleDashboardSpeech}
-            className={`flex items-center gap-1.5 px-3 py-2 text-xs font-semibold rounded-lg transition-colors border shadow-xs ${
+            className={`flex items-center gap-1.5 px-3 py-2 text-xs font-semibold rounded-lg transition-colors border shadow-xs cursor-pointer ${
               isSpeaking 
                 ? 'bg-amber-100 text-amber-900 border-amber-300 animate-pulse'
                 : 'bg-slate-50 hover:bg-slate-100 text-slate-700 border-slate-300'
@@ -192,7 +192,7 @@ export const CustomerDashboard: React.FC = () => {
           <button
             type="button"
             onClick={() => setActiveCustomerTab('deposit')}
-            className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-white bg-[#2563EB] hover:bg-blue-700 rounded-lg transition-colors shadow-xs"
+            className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-white bg-[#2563EB] hover:bg-blue-700 rounded-lg transition-colors shadow-xs cursor-pointer"
           >
             <ArrowDownToLine className="w-3.5 h-3.5" />
             <span>{t.navDeposit}</span>
@@ -201,7 +201,7 @@ export const CustomerDashboard: React.FC = () => {
           <button
             type="button"
             onClick={() => setActiveCustomerTab('transfer')}
-            className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-slate-700 bg-white border border-slate-300 hover:bg-slate-50 rounded-lg transition-colors shadow-xs"
+            className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-slate-700 bg-white border border-slate-300 hover:bg-slate-50 rounded-lg transition-colors shadow-xs cursor-pointer"
           >
             <ArrowLeftRight className="w-3.5 h-3.5 text-[#2563EB]" />
             <span>{t.navTransfer}</span>
@@ -228,7 +228,7 @@ export const CustomerDashboard: React.FC = () => {
           <button
             type="button"
             onClick={() => setActiveCustomerTab('my_accounts')}
-            className="mt-3 text-[11px] font-semibold text-[#2563EB] hover:text-blue-800 flex items-center gap-1 transition-colors"
+            className="mt-3 text-[11px] font-semibold text-[#2563EB] hover:text-blue-800 flex items-center gap-1 transition-colors cursor-pointer"
           >
             <span>Manage All Accounts</span>
             <ChevronRight className="w-3 h-3" />
@@ -299,7 +299,7 @@ export const CustomerDashboard: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setIsCardFlipped(!isCardFlipped)}
-                className="text-xs font-semibold text-[#2563EB] hover:underline"
+                className="text-xs font-semibold text-[#2563EB] hover:underline cursor-pointer"
               >
                 {isCardFlipped ? 'Show Front' : 'Flip to Back (CVV)'}
               </button>
@@ -364,12 +364,12 @@ export const CustomerDashboard: React.FC = () => {
               )}
             </div>
 
-              {/* Card Controls Bar */}
+            {/* Card Controls Bar */}
             <div className="grid grid-cols-2 gap-2 pt-1">
               <button
                 type="button"
                 onClick={() => setIsCardLocked(!isCardLocked)}
-                className={`py-2 px-3 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors border ${
+                className={`py-2 px-3 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors border cursor-pointer ${
                   isCardLocked 
                     ? 'bg-red-50 text-red-700 border-red-200' 
                     : 'bg-emerald-50 text-emerald-800 border-emerald-200'
@@ -382,7 +382,7 @@ export const CustomerDashboard: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setActiveCustomerTab('my_cards')}
-                className="py-2 px-3 rounded-lg text-xs font-semibold text-slate-700 bg-slate-50 hover:bg-slate-100 border border-slate-200 transition-colors text-center"
+                className="py-2 px-3 rounded-lg text-xs font-semibold text-slate-700 bg-slate-50 hover:bg-slate-100 border border-slate-200 transition-colors text-center cursor-pointer"
               >
                 Card Settings & Limits
               </button>
@@ -445,7 +445,7 @@ export const CustomerDashboard: React.FC = () => {
                     key={val}
                     type="button"
                     onClick={() => setQuickAmount(val)}
-                    className={`px-2 py-1 rounded text-[11px] font-mono font-medium border transition-colors ${
+                    className={`px-2 py-1 rounded text-[11px] font-mono font-medium border transition-colors cursor-pointer ${
                       quickAmount === val
                         ? 'bg-[#2563EB] text-white border-[#2563EB]'
                         : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100'
@@ -458,7 +458,7 @@ export const CustomerDashboard: React.FC = () => {
 
               <button
                 type="submit"
-                className="w-full py-2.5 text-xs font-bold text-white bg-[#142B4A] hover:bg-[#1f3f6b] rounded-lg transition-colors shadow-xs"
+                className="w-full py-2.5 text-xs font-bold text-white bg-[#142B4A] hover:bg-[#1f3f6b] rounded-lg transition-colors shadow-xs cursor-pointer"
               >
                 Send Direct Bank Transfer
               </button>
@@ -466,7 +466,7 @@ export const CustomerDashboard: React.FC = () => {
           </div>
         </div>
 
-        {/* Right 7 Cols: Accounts Overview & Live Passbook */}
+        {/* Right 7 Cols: Accounts Overview, Government Schemes & Live Passbook */}
         <div className="lg:col-span-7 space-y-6">
           {/* Account Ledgers Card */}
           <div className="bg-white rounded-2xl border border-slate-200/90 shadow-xs overflow-hidden">
@@ -478,7 +478,7 @@ export const CustomerDashboard: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setActiveCustomerTab('open_account')}
-                className="flex items-center gap-1 text-xs font-semibold text-[#2563EB] hover:underline"
+                className="flex items-center gap-1 text-xs font-semibold text-[#2563EB] hover:underline cursor-pointer"
               >
                 <PlusCircle className="w-3.5 h-3.5" />
                 <span>Open Account</span>
@@ -524,7 +524,7 @@ export const CustomerDashboard: React.FC = () => {
                           setSelectedAccountNumber(acc.accountNumber);
                           setActiveCustomerTab('transfer');
                         }}
-                        className="text-xs font-semibold text-[#2563EB] hover:underline"
+                        className="text-xs font-semibold text-[#2563EB] hover:underline cursor-pointer"
                       >
                         Transfer
                       </button>
@@ -535,11 +535,133 @@ export const CustomerDashboard: React.FC = () => {
                           setSelectedAccountNumber(acc.accountNumber);
                           setActiveCustomerTab('history');
                         }}
-                        className="text-xs font-semibold text-slate-600 hover:text-slate-900"
+                        className="text-xs font-semibold text-slate-600 hover:text-slate-900 cursor-pointer"
                       >
                         Passbook
                       </button>
                     </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* DEDICATED GOVERNMENT SCHEMES & LOAN ASSISTANCE SECTION (INTEGRATED ON DASHBOARD) */}
+          <div className="bg-white rounded-2xl border border-slate-200/90 shadow-xs p-5 space-y-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-3">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-lg bg-blue-50 text-[#2563EB] flex items-center justify-center">
+                  <Landmark className="w-4 h-4" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-sm text-[#142B4A]">
+                    Government Schemes & Loan Assistance
+                  </h3>
+                  <p className="text-[11px] text-slate-500">
+                    Direct welfare subsidies, KCC loans, Mudra finance & state student benefits
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => setActiveCustomerTab('loan_finder')}
+                  className="px-3 py-1.5 text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors flex items-center gap-1 cursor-pointer"
+                >
+                  <Calculator className="w-3.5 h-3.5 text-[#2563EB]" />
+                  <span>Calculate EMI</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setActiveCustomerTab('schemes')}
+                  className="px-3 py-1.5 text-xs font-bold text-white bg-[#2563EB] hover:bg-blue-700 rounded-lg transition-colors cursor-pointer"
+                >
+                  <span>View All ({schemes.length})</span>
+                </button>
+              </div>
+            </div>
+
+            {/* Category Pills & Search Bar */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0 scrollbar-none">
+                {dashboardCategories.map(cat => (
+                  <button
+                    key={cat.id}
+                    type="button"
+                    onClick={() => setDashCategory(cat.id)}
+                    className={`px-2.5 py-1 text-[11px] font-semibold rounded-lg transition-colors whitespace-nowrap cursor-pointer ${
+                      dashCategory === cat.id
+                        ? 'bg-[#142B4A] text-white shadow-xs'
+                        : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                    }`}
+                  >
+                    {cat.label}
+                  </button>
+                ))}
+              </div>
+
+              <div className="relative min-w-[200px]">
+                <Search className="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-2" />
+                <input
+                  type="text"
+                  placeholder="Filter scheme or subsidy..."
+                  value={dashSearch}
+                  onChange={(e) => setDashSearch(e.target.value)}
+                  className="w-full pl-8 pr-3 py-1 text-xs border border-slate-200 rounded-lg bg-slate-50 focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#2563EB]"
+                />
+              </div>
+            </div>
+
+            {/* Scheme Cards Compact Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+              {filteredDashboardSchemes.slice(0, 4).map(scheme => (
+                <div 
+                  key={scheme.id}
+                  className="p-3.5 rounded-xl border border-slate-200/90 hover:border-blue-300 hover:shadow-xs transition-all flex flex-col justify-between space-y-2.5 bg-slate-50/40"
+                >
+                  <div className="space-y-1.5">
+                    <div className="flex items-center justify-between text-[10px]">
+                      <span className="font-bold text-[#2563EB] bg-blue-50 px-2 py-0.5 rounded border border-blue-200">
+                        {scheme.categoryLabel}
+                      </span>
+                      {scheme.isStateScheme && (
+                        <span className="font-bold text-amber-800 bg-amber-50 px-1.5 py-0.2 rounded border border-amber-200">
+                          Karnataka
+                        </span>
+                      )}
+                    </div>
+                    
+                    <h4 className="font-bold text-xs text-[#142B4A] line-clamp-1">
+                      {scheme.title}
+                    </h4>
+
+                    <div className="text-[11px] font-bold text-emerald-700 font-mono">
+                      {scheme.loanOrSubsidyAmount || scheme.financialBenefits}
+                    </div>
+
+                    <p className="text-[11px] text-slate-500 line-clamp-2">
+                      {scheme.description}
+                    </p>
+                  </div>
+
+                  <div className="pt-2 border-t border-slate-200/70 flex items-center justify-between text-xs">
+                    <button
+                      type="button"
+                      onClick={() => setActiveCustomerTab('schemes')}
+                      className="text-[11px] font-semibold text-[#2563EB] hover:underline cursor-pointer"
+                    >
+                      Eligibility Details
+                    </button>
+                    <a
+                      href={scheme.officialPortalUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-1 text-[11px] font-bold text-slate-700 hover:text-[#2563EB] bg-white px-2 py-1 rounded border border-slate-200 shadow-2xs cursor-pointer"
+                    >
+                      <span>Official Portal</span>
+                      <ExternalLink className="w-3 h-3 text-slate-400" />
+                    </a>
                   </div>
                 </div>
               ))}
@@ -556,7 +678,7 @@ export const CustomerDashboard: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setActiveCustomerTab('history')}
-                className="text-xs font-semibold text-[#2563EB] hover:underline"
+                className="text-xs font-semibold text-[#2563EB] hover:underline cursor-pointer"
               >
                 {t.viewAll}
               </button>
@@ -571,9 +693,11 @@ export const CustomerDashboard: React.FC = () => {
                 <table className="w-full text-left text-xs">
                   <thead className="bg-slate-50 border-b border-slate-100 text-slate-500 font-medium">
                     <tr>
+                      <th className="py-2.5 px-4 font-mono">TXN ID</th>
                       <th className="py-2.5 px-4">{t.date}</th>
                       <th className="py-2.5 px-4">{t.type}</th>
-                      <th className="py-2.5 px-4">Description</th>
+                      <th className="py-2.5 px-4">Origin / Sender</th>
+                      <th className="py-2.5 px-4">Destination / Receiver</th>
                       <th className="py-2.5 px-4 text-right">{t.amount}</th>
                       <th className="py-2.5 px-4 text-center">Advice</th>
                     </tr>
@@ -583,17 +707,29 @@ export const CustomerDashboard: React.FC = () => {
                       const isCredit = tx.type === 'deposit' || tx.type === 'transfer_in';
                       return (
                         <tr key={tx.id} className="hover:bg-slate-50/70 transition-colors">
+                          <td className="py-3 px-4 font-mono font-bold text-[#142B4A] whitespace-nowrap">
+                            {tx.id}
+                          </td>
                           <td className="py-3 px-4 font-mono text-slate-600 whitespace-nowrap">
                             {tx.date.split(' ')[0]}
                           </td>
-                          <td className="py-3 px-4 font-semibold uppercase tracking-wider text-[11px]">
-                            {tx.type.replace('_', ' ')}
+                          <td className="py-3 px-4 whitespace-nowrap">
+                            <span className={`inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${
+                              isCredit ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-slate-100 text-slate-700'
+                            }`}>
+                              {isCredit ? 'CREDIT' : 'DEBIT'}
+                            </span>
                           </td>
-                          <td className="py-3 px-4 text-slate-700 truncate max-w-[200px]">
-                            {tx.description}
+                          <td className="py-3 px-4 truncate max-w-[140px] text-slate-700">
+                            <span className="font-semibold block truncate">{tx.senderName || currentCustomer?.fullName}</span>
+                            <span className="text-[10px] text-slate-400 font-mono truncate">{tx.senderAccount || tx.accountNumber}</span>
+                          </td>
+                          <td className="py-3 px-4 truncate max-w-[140px] text-slate-700">
+                            <span className="font-semibold block truncate">{tx.recipientName || currentCustomer?.fullName || 'Self'}</span>
+                            <span className="text-[10px] text-slate-400 font-mono truncate">{tx.recipientAccount || tx.accountNumber}</span>
                           </td>
                           <td className={`py-3 px-4 text-right font-mono tabular-nums font-bold ${
-                            isCredit ? 'text-emerald-600' : 'text-slate-900'
+                            isCredit ? 'text-emerald-700' : 'text-slate-900'
                           }`}>
                             {isCredit ? '+' : '-'}₹{tx.amount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                           </td>
@@ -601,8 +737,8 @@ export const CustomerDashboard: React.FC = () => {
                             <button
                               type="button"
                               onClick={() => setLastTransactionReceipt(tx)}
-                              className="text-slate-500 hover:text-[#2563EB] p-1 rounded-sm"
-                              title="View Official Receipt"
+                              className="text-slate-500 hover:text-[#2563EB] p-1 rounded-sm cursor-pointer"
+                              title="View Official Receipt Slip"
                             >
                               <Eye className="w-3.5 h-3.5" />
                             </button>

@@ -43,7 +43,7 @@ export const Header: React.FC<HeaderProps> = ({ pageTitle }) => {
         <button
           type="button"
           onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-          className="p-2 text-slate-500 hover:text-slate-800 hover:bg-slate-100 rounded-lg transition-colors lg:flex items-center justify-center"
+          className="p-2 text-slate-500 hover:text-slate-800 hover:bg-slate-100 rounded-lg transition-colors lg:flex items-center justify-center cursor-pointer"
           title="Toggle Navigation Menu"
         >
           <Menu className="w-5 h-5" />
@@ -69,7 +69,7 @@ export const Header: React.FC<HeaderProps> = ({ pageTitle }) => {
             <button
               type="button"
               onClick={() => setNotificationsOpen(!notificationsOpen)}
-              className="relative p-2 text-slate-600 hover:text-[#142B4A] hover:bg-slate-100 rounded-lg transition-colors focus:outline-none"
+              className="relative p-2 text-slate-600 hover:text-[#142B4A] hover:bg-slate-100 rounded-lg transition-colors focus:outline-none cursor-pointer"
               title="Notifications"
             >
               <Bell className="w-4 h-4" />
@@ -169,7 +169,7 @@ export const Header: React.FC<HeaderProps> = ({ pageTitle }) => {
           <button
             type="button"
             onClick={logout}
-            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-600 hover:text-red-700 hover:bg-red-50 rounded-md transition-colors"
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-600 hover:text-red-700 hover:bg-red-50 rounded-md transition-colors cursor-pointer"
             title="End Session"
           >
             <LogOut className="w-3.5 h-3.5" />

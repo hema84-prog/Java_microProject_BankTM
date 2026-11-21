@@ -108,7 +108,7 @@ export const CustomerSidebar: React.FC = () => {
         <button
           type="button"
           onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-          className="p-1 rounded-md text-slate-400 hover:text-white hover:bg-white/10 transition-colors hidden lg:block"
+          className="p-1 rounded-md text-slate-400 hover:text-white hover:bg-white/10 transition-colors hidden lg:block cursor-pointer"
           title={sidebarCollapsed ? 'Expand Sidebar' : 'Collapse Sidebar'}
         >
           {sidebarCollapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
@@ -133,7 +133,7 @@ export const CustomerSidebar: React.FC = () => {
                     key={item.id}
                     onClick={() => setActiveCustomerTab(item.id)}
                     title={sidebarCollapsed ? item.label : undefined}
-                    className={`w-full flex items-center gap-3 px-2.5 py-2 rounded-lg text-xs font-medium transition-all text-left group ${
+                    className={`w-full flex items-center gap-3 px-2.5 py-2 rounded-lg text-xs font-medium transition-all text-left group cursor-pointer ${
                       isActive 
                         ? 'bg-[#2563EB] text-white shadow-xs' 
                         : 'text-slate-300 hover:text-white hover:bg-white/8'
@@ -158,7 +158,7 @@ export const CustomerSidebar: React.FC = () => {
         <button
           type="button"
           onClick={logout}
-          className="w-full flex items-center gap-3 px-2.5 py-2 text-xs font-medium text-slate-400 hover:text-red-300 hover:bg-red-500/10 rounded-lg transition-colors text-left"
+          className="w-full flex items-center gap-3 px-2.5 py-2 text-xs font-medium text-slate-400 hover:text-red-300 hover:bg-red-500/10 rounded-lg transition-colors text-left cursor-pointer"
           title="Sign Out"
         >
           <LogOut className="w-4 h-4 shrink-0 text-red-400" />

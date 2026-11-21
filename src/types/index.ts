@@ -59,6 +59,11 @@ export interface BankingTransaction {
   description: string;
   recipientAccount?: string;
   recipientName?: string;
+  senderAccount?: string;
+  senderName?: string;
+  sourceOfMoney?: string;
+  destinationOfMoney?: string;
+  channel?: 'Internal Transfer' | 'NEFT' | 'IMPS' | 'RTGS' | 'UPI' | 'Cash Deposit' | 'ATM' | 'DBT Subsidy' | string;
   status: TransactionStatus;
   referenceNumber: string;
 }
@@ -66,6 +71,7 @@ export interface BankingTransaction {
 export type CardType = 'debit' | 'credit';
 export type CardNetwork = 'RuPay' | 'Visa' | 'Mastercard';
 export type CardApplicationStatus = 
+  | 'pending'
   | 'submitted' 
   | 'under_review' 
   | 'additional_info_required'
@@ -81,17 +87,35 @@ export interface CardApplication {
   accountNumber: string;
   cardType: CardType;
   cardNetwork: CardNetwork;
+  reasonForApplying: string;
   status: CardApplicationStatus;
   submittedAt: string;
   updatedAt: string;
   deliveryAddress: string;
   remarks?: string;
+  // Personal & KYC Details (Manual Bank Form)
+  nameOnCard?: string;
+  dateOfBirth?: string;
+  gender?: 'Male' | 'Female' | 'Third Gender' | string;
+  fatherOrMotherName?: string;
+  panNumber?: string;
+  aadhaarNumber?: string;
+  contactMobile?: string;
+  contactEmail?: string;
+  // Card Facilities Requested
+  enableAtmCash?: boolean;
+  enablePosMerchant?: boolean;
+  enableOnlineEcommerce?: boolean;
+  enableContactlessNfc?: boolean;
+  enableInternational?: boolean;
   // Credit specific:
   employmentCategory?: 'salaried' | 'self_employed' | 'business' | 'student' | 'agricultural';
   monthlyIncome?: number;
   employerName?: string;
   requestedLimit?: number;
   simulatedScore?: number;
+  existingCreditCards?: string;
+  declarationAccepted?: boolean;
   // Issued card simulated details (no sensitive CVV/PIN stored)
   maskedCardNumber?: string;
   expiryDate?: string;
@@ -109,6 +133,41 @@ export interface AccountApplication {
   status: 'pending' | 'approved' | 'rejected';
   submittedAt: string;
   remarks?: string;
+  // Manual Bank Account Opening Form (AOF) Comprehensive Details
+  applicantPrefix?: 'Mr.' | 'Ms.' | 'Mrs.' | 'Dr.';
+  fatherOrSpouseName?: string;
+  motherName?: string;
+  dateOfBirth?: string;
+  gender?: 'Male' | 'Female' | 'Third Gender' | string;
+  nationality?: string;
+  maritalStatus?: 'Single' | 'Married' | 'Other' | string;
+  panNumber?: string;
+  aadhaarNumber?: string;
+  occupationType?: string;
+  annualIncome?: string;
+  sourceOfFunds?: string;
+  residentialAddress?: string;
+  city?: string;
+  state?: string;
+  pinCode?: string;
+  communicationAddressSame?: boolean;
+  communicationAddress?: string;
+  facilitiesRequested?: {
+    chequeBook?: boolean;
+    debitCard?: boolean;
+    netBanking?: boolean;
+    smsAlerts?: boolean;
+    passbook?: boolean;
+  };
+  nomineeDetails?: {
+    name: string;
+    relationship: string;
+    ageOrDob: string;
+    address: string;
+    isMinor?: boolean;
+    guardianName?: string;
+  };
+  declarationAccepted?: boolean;
 }
 
 export interface GovernmentScheme {

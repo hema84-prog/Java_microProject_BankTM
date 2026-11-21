@@ -84,8 +84,16 @@ export const SchemeManagement: React.FC = () => {
       targetBeneficiaries: targetBeneficiaries.trim(),
       eligibility: eligibilityRaw.split('\n').map(s => s.trim()).filter(Boolean),
       financialBenefits: financialBenefits.trim(),
+      loanOrSubsidyAmount: financialBenefits.trim(),
+      applicationProcedure: [
+        'Visit the official government portal via the direct redirect button',
+        'Authenticate using Aadhaar or DigiLocker credentials',
+        'Submit the online scheme application with necessary KYC documents',
+        'Track approval and direct benefit transfer (DBT) disbursement status'
+      ],
       requiredDocuments: documentsRaw.split(',').map(s => s.trim()).filter(Boolean),
       officialPortalUrl: officialPortalUrl.trim(),
+      portalName: officialPortalUrl.replace(/https?:\/\/(www\.)?/, '').split('/')[0] || 'Official Portal',
       lastVerifiedDate: new Date().toISOString().slice(0, 10),
       isVerified: true,
       department: department.trim(),

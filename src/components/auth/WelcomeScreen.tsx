@@ -128,7 +128,7 @@ export const WelcomeScreen: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#F5F7FA] text-[#172B4A] flex flex-col selection:bg-[#2563EB] selection:text-white">
+    <div className="min-h-screen bg-[#F5F7FA] text-[#172B4D] flex flex-col selection:bg-[#2563EB] selection:text-white">
       {/* 1. Real-time Rate Ticker Bar */}
       <div className="bg-[#071220] text-slate-300 text-[11px] font-mono py-1.5 px-4 sm:px-8 border-b border-slate-800 flex items-center justify-between overflow-x-auto whitespace-nowrap gap-4">
         <div className="flex items-center gap-4">
@@ -163,7 +163,7 @@ export const WelcomeScreen: React.FC = () => {
           <button
             type="button"
             onClick={handleAudioVoice}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all shadow-xs ${
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all shadow-xs cursor-pointer ${
               isSpeaking 
                 ? 'bg-amber-400 text-slate-950 animate-pulse'
                 : 'bg-white/10 hover:bg-white/20 text-white border border-white/20'
@@ -347,7 +347,7 @@ export const WelcomeScreen: React.FC = () => {
                       value={loginUser}
                       onChange={(e) => setLoginUser(e.target.value)}
                       placeholder="e.g. rajesh or 9876543210"
-                      className="w-full pl-20 pr-3 py-3 text-xs sm:text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#002C6C] bg-white"
+                      className="w-full pl-20 pr-3 py-3 text-xs sm:text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#002C6C] bg-white text-slate-900"
                     />
                   </div>
                 </div>
@@ -364,12 +364,12 @@ export const WelcomeScreen: React.FC = () => {
                       value={loginPass}
                       onChange={(e) => setLoginPass(e.target.value)}
                       placeholder="Enter / Select Password"
-                      className="w-full px-3 py-3 text-xs sm:text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#002C6C] pr-10 bg-white"
+                      className="w-full px-3 py-3 text-xs sm:text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#002C6C] pr-10 bg-white text-slate-900"
                     />
                     <button
                       type="button"
                       onClick={() => setShowPass(!showPass)}
-                      className="absolute right-3 text-slate-400 hover:text-slate-600"
+                      className="absolute right-3 text-slate-400 hover:text-slate-600 cursor-pointer"
                       title={showPass ? 'Hide Password' : 'Show Password'}
                     >
                       {showPass ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -404,7 +404,7 @@ export const WelcomeScreen: React.FC = () => {
                       key={idx}
                       type="button"
                       onClick={() => handleSelectDemo(prof)}
-                      className={`p-2 rounded-lg border text-left transition-all ${
+                      className={`p-2 rounded-lg border text-left transition-all cursor-pointer ${
                         loginUser === prof.user
                           ? 'border-[#002C6C] bg-white ring-2 ring-[#002C6C] shadow-xs'
                           : 'border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50'
@@ -553,7 +553,7 @@ export const WelcomeScreen: React.FC = () => {
 
               <button
                 type="submit"
-                className="w-full sm:w-72 py-3 text-xs sm:text-sm font-bold text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg transition-all shadow-md flex items-center justify-center gap-2"
+                className="w-full sm:w-72 py-3 text-xs sm:text-sm font-bold text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer"
               >
                 <span>Create Account & Launch Banking</span>
                 <ArrowRight className="w-4 h-4" />
@@ -578,7 +578,7 @@ export const WelcomeScreen: React.FC = () => {
                     required
                     value={loginUser}
                     onChange={(e) => setLoginUser(e.target.value)}
-                    className="w-full px-3 py-3 text-xs sm:text-sm border border-slate-300 rounded-lg font-mono"
+                    className="w-full px-3 py-3 text-xs sm:text-sm border border-slate-300 rounded-lg font-mono text-slate-900"
                   />
                 </div>
 
@@ -591,14 +591,14 @@ export const WelcomeScreen: React.FC = () => {
                     required
                     value={loginPass}
                     onChange={(e) => setLoginPass(e.target.value)}
-                    className="w-full px-3 py-3 text-xs sm:text-sm border border-slate-300 rounded-lg font-mono"
+                    className="w-full px-3 py-3 text-xs sm:text-sm border border-slate-300 rounded-lg font-mono text-slate-900"
                   />
                 </div>
               </div>
 
               <button
                 type="submit"
-                className="w-full sm:w-72 py-3 text-xs sm:text-sm font-bold text-white bg-red-600 hover:bg-red-700 rounded-lg transition-all shadow-md flex items-center justify-center gap-2"
+                className="w-full sm:w-72 py-3 text-xs sm:text-sm font-bold text-white bg-red-600 hover:bg-red-700 rounded-lg transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer"
               >
                 <ShieldCheck className="w-4 h-4" />
                 <span>Enter Administration Console</span>

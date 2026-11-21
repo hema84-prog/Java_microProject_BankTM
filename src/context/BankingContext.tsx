@@ -98,11 +98,11 @@ interface BankingContextType {
   customerAccounts: BankAccount[];
   selectedAccountNumber: string;
   setSelectedAccountNumber: (accNo: string) => void;
-  applyNewAccount: (type: AccountType, initialDeposit: number, branch: string) => { success: boolean; message: string };
+  applyNewAccount: (type: AccountType, initialDeposit: number, branch: string, details?: Partial<AccountApplication>) => { success: boolean; message: string; applicationId?: string };
   
   // Banking Operations
-  deposit: (accountNumber: string, amount: number, desc?: string) => { success: boolean; transaction?: BankingTransaction; message?: string };
-  withdraw: (accountNumber: string, amount: number, desc?: string) => { success: boolean; transaction?: BankingTransaction; message?: string };
+  deposit: (accountNumber: string, amount: number, desc?: string, sourceName?: string, sourceAccountOrChannel?: string) => { success: boolean; transaction?: BankingTransaction; message?: string };
+  withdraw: (accountNumber: string, amount: number, desc?: string, destinationName?: string, destinationChannelAcc?: string) => { success: boolean; transaction?: BankingTransaction; message?: string };
   transfer: (senderAcc: string, recipientAcc: string, recipientName: string, amount: number, desc?: string) => { success: boolean; transaction?: BankingTransaction; message?: string };
   transactions: BankingTransaction[];
   customerTransactions: BankingTransaction[];
@@ -110,7 +110,7 @@ interface BankingContextType {
   // Cards
   cardApplications: CardApplication[];
   customerCardApplications: CardApplication[];
-  applyDebitCard: (accNo: string, network: CardNetwork, address: string) => { success: boolean; message: string };
+  applyDebitCard: (accNo: string, network: CardNetwork, address: string, reason?: string, details?: Partial<CardApplication>) => { success: boolean; message: string; applicationId?: string };
   applyCreditCard: (
     accNo: string, 
     network: CardNetwork, 
@@ -118,8 +118,10 @@ interface BankingContextType {
     monthlyIncome: number,
     employerName: string,
     requestedLimit: number,
-    address: string
-  ) => { success: boolean; message: string };
+    address: string,
+    reason?: string,
+    details?: Partial<CardApplication>
+  ) => { success: boolean; message: string; applicationId?: string };
 
   // Admin Actions
   customers: CustomerUser[];
@@ -441,7 +443,7 @@ export const BankingProvider: React.FC<{ children: React.ReactNode }> = ({ child
     : [];
 
   // Account Application
-  const applyNewAccount = (type: AccountType, initialDeposit: number, branch: string) => {
+  const applyNewAccount = (type: AccountType, initialDeposit: number, branch: string, details?: Partial<AccountApplication>) => {
     if (!currentCustomer) return { success: false, message: 'Please log in' };
     if (type === 'savings' && initialDeposit < 1000) {
       return { success: false, message: 'Savings account requires minimum ₹1,000 initial deposit.' };
@@ -453,23 +455,24 @@ export const BankingProvider: React.FC<{ children: React.ReactNode }> = ({ child
     const newApp: AccountApplication = {
       id: `ACC-REQ-${Math.floor(1000 + Math.random() * 9000)}`,
       customerId: currentCustomer.id,
-      customerName: currentCustomer.fullName,
-      customerEmail: currentCustomer.email,
-      customerMobile: currentCustomer.mobile,
+      customerName: details?.customerName || currentCustomer.fullName,
+      customerEmail: details?.customerEmail || currentCustomer.email,
+      customerMobile: details?.customerMobile || currentCustomer.mobile,
       accountType: type,
       initialDeposit,
       branch: branch || 'Indiranagar Branch, Bengaluru',
       status: 'pending',
       submittedAt: new Date().toISOString(),
       remarks: 'Application under verification by branch officer.',
+      ...(details || {}),
     };
 
     setAccountApplications(prev => [newApp, ...prev]);
-    return { success: true, message: 'Account application submitted successfully! It will be reviewed by the bank administrator.' };
+    return { success: true, message: 'Account application submitted successfully! It will be reviewed by the bank administrator.', applicationId: newApp.id };
   };
 
   // Banking Transactions
-  const deposit = (accountNumber: string, amount: number, desc?: string) => {
+  const deposit = (accountNumber: string, amount: number, desc?: string, sourceName?: string, sourceAccountOrChannel?: string) => {
     if (!currentCustomer) return { success: false, message: 'Unauthorized' };
     if (amount <= 0 || isNaN(amount)) {
       return { success: false, message: 'Please enter a valid positive amount.' };
@@ -482,6 +485,9 @@ export const BankingProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
     const newBalance = targetAcc.balance + amount;
     const txId = `TXN-${Date.now().toString().slice(-8)}`;
+    const depositSource = sourceName?.trim() || 'Branch Cash Counter / CDM';
+    const depositChannel = sourceAccountOrChannel?.trim() || 'CDM-COUNTER-01';
+
     const newTx: BankingTransaction = {
       id: txId,
       customerId: currentCustomer.id,
@@ -490,7 +496,14 @@ export const BankingProvider: React.FC<{ children: React.ReactNode }> = ({ child
       amount,
       balanceAfter: newBalance,
       date: new Date().toISOString().replace('T', ' ').slice(0, 19),
-      description: desc?.trim() || 'Online Cash / Electronic Deposit',
+      description: desc?.trim() || `Cash Deposit via ${depositSource}`,
+      senderAccount: depositChannel,
+      senderName: depositSource,
+      recipientAccount: accountNumber,
+      recipientName: currentCustomer.fullName,
+      sourceOfMoney: depositSource,
+      destinationOfMoney: `${targetAcc.accountType.toUpperCase()} Account (${accountNumber})`,
+      channel: 'Cash Deposit',
       status: 'success',
       referenceNumber: `REF${Date.now().toString().slice(-10)}`,
     };
@@ -502,7 +515,7 @@ export const BankingProvider: React.FC<{ children: React.ReactNode }> = ({ child
     return { success: true, transaction: newTx };
   };
 
-  const withdraw = (accountNumber: string, amount: number, desc?: string) => {
+  const withdraw = (accountNumber: string, amount: number, desc?: string, destinationName?: string, destinationChannelAcc?: string) => {
     if (!currentCustomer) return { success: false, message: 'Unauthorized' };
     if (amount <= 0 || isNaN(amount)) {
       return { success: false, message: 'Please enter a valid positive amount.' };
@@ -534,6 +547,9 @@ export const BankingProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
     const newBalance = targetAcc.balance - amount;
     const txId = `TXN-${Date.now().toString().slice(-8)}`;
+    const destLabel = destinationName?.trim() || 'Cash Disbursed (Self / ATM Dispenser)';
+    const destChannel = destinationChannelAcc?.trim() || 'ATM-DISPENSER-01';
+
     const newTx: BankingTransaction = {
       id: txId,
       customerId: currentCustomer.id,
@@ -542,7 +558,14 @@ export const BankingProvider: React.FC<{ children: React.ReactNode }> = ({ child
       amount,
       balanceAfter: newBalance,
       date: new Date().toISOString().replace('T', ' ').slice(0, 19),
-      description: desc?.trim() || 'ATM / Branch Funds Withdrawal',
+      description: desc?.trim() || `Cash Withdrawal via ${destLabel}`,
+      senderAccount: accountNumber,
+      senderName: currentCustomer.fullName,
+      recipientAccount: destChannel,
+      recipientName: destLabel,
+      sourceOfMoney: `${targetAcc.accountType.toUpperCase()} Account (${accountNumber})`,
+      destinationOfMoney: destLabel,
+      channel: 'ATM',
       status: 'success',
       referenceNumber: `REF${Date.now().toString().slice(-10)}`,
     };
@@ -601,8 +624,13 @@ export const BankingProvider: React.FC<{ children: React.ReactNode }> = ({ child
       balanceAfter: newSenderBal,
       date: now,
       description: desc?.trim() || `Fund Transfer to ${recipientName || recipientAcc}`,
+      senderAccount: senderAcc,
+      senderName: currentCustomer.fullName,
       recipientAccount: recipientAcc.trim(),
       recipientName: recipientName.trim(),
+      sourceOfMoney: `${sender.accountType.toUpperCase()} Account (${senderAcc})`,
+      destinationOfMoney: `Beneficiary Account (${recipientAcc.trim()})`,
+      channel: 'Internal Transfer',
       status: 'success',
       referenceNumber: ref,
     };
@@ -611,6 +639,7 @@ export const BankingProvider: React.FC<{ children: React.ReactNode }> = ({ child
     const recipientBankTMAcc = accounts.find(a => a.accountNumber === recipientAcc.trim());
     if (recipientBankTMAcc) {
       const newRecipientBal = recipientBankTMAcc.balance + amount;
+      const recipientUser = customers.find(c => c.id === recipientBankTMAcc.customerId);
       const recipientTx: BankingTransaction = {
         id: `TXN-${(Date.now() + 1).toString().slice(-8)}`,
         customerId: recipientBankTMAcc.customerId,
@@ -620,8 +649,13 @@ export const BankingProvider: React.FC<{ children: React.ReactNode }> = ({ child
         balanceAfter: newRecipientBal,
         date: now,
         description: `Fund Transfer from ${currentCustomer.fullName} (${senderAcc})`,
-        recipientAccount: senderAcc,
-        recipientName: currentCustomer.fullName,
+        senderAccount: senderAcc,
+        senderName: currentCustomer.fullName,
+        recipientAccount: recipientBankTMAcc.accountNumber,
+        recipientName: recipientUser?.fullName || recipientName.trim(),
+        sourceOfMoney: `Sender Account (${senderAcc})`,
+        destinationOfMoney: `${recipientBankTMAcc.accountType.toUpperCase()} Account (${recipientBankTMAcc.accountNumber})`,
+        channel: 'Internal Transfer',
         status: 'success',
         referenceNumber: ref,
       };
@@ -643,12 +677,12 @@ export const BankingProvider: React.FC<{ children: React.ReactNode }> = ({ child
   };
 
   // Card Application logic
-  const applyDebitCard = (accNo: string, network: CardNetwork, address: string) => {
+  const applyDebitCard = (accNo: string, network: CardNetwork, address: string, reason?: string, details?: Partial<CardApplication>) => {
     if (!currentCustomer) return { success: false, message: 'Please log in' };
 
     // Prevent duplicate pending applications
     const pendingExisting = cardApplications.find(
-      c => c.customerId === currentCustomer.id && c.accountNumber === accNo && c.cardType === 'debit' && (c.status === 'submitted' || c.status === 'under_review')
+      c => c.customerId === currentCustomer.id && c.accountNumber === accNo && c.cardType === 'debit' && (c.status === 'pending' || c.status === 'submitted' || c.status === 'under_review')
     );
     if (pendingExisting) {
       return { success: false, message: 'A debit card application is already in progress for this account.' };
@@ -657,19 +691,22 @@ export const BankingProvider: React.FC<{ children: React.ReactNode }> = ({ child
     const newApp: CardApplication = {
       id: `CRD-APP-${Math.floor(1000 + Math.random() * 9000)}`,
       customerId: currentCustomer.id,
-      customerName: currentCustomer.fullName,
+      customerName: details?.customerName || currentCustomer.fullName,
       accountNumber: accNo,
       cardType: 'debit',
       cardNetwork: network,
-      status: 'submitted',
+      reasonForApplying: reason?.trim() || 'New Account Debit Card for ATM & Everyday POS Purchases',
+      status: 'pending',
       submittedAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
       deliveryAddress: address || currentCustomer.address,
-      remarks: 'Application submitted. Pending branch verification.',
+      remarks: 'Application submitted. Pending branch verification and approval.',
+      declarationAccepted: true,
+      ...(details || {}),
     };
 
     setCardApplications(prev => [newApp, ...prev]);
-    return { success: true, message: 'Debit card application submitted successfully!' };
+    return { success: true, message: 'Debit card application submitted successfully! Status is now Pending.', applicationId: newApp.id };
   };
 
   const applyCreditCard = (
@@ -679,12 +716,14 @@ export const BankingProvider: React.FC<{ children: React.ReactNode }> = ({ child
     monthlyIncome: number,
     employerName: string,
     requestedLimit: number,
-    address: string
+    address: string,
+    reason?: string,
+    details?: Partial<CardApplication>
   ) => {
     if (!currentCustomer) return { success: false, message: 'Please log in' };
 
     const pendingExisting = cardApplications.find(
-      c => c.customerId === currentCustomer.id && c.cardType === 'credit' && (c.status === 'submitted' || c.status === 'under_review')
+      c => c.customerId === currentCustomer.id && c.cardType === 'credit' && (c.status === 'pending' || c.status === 'submitted' || c.status === 'under_review')
     );
     if (pendingExisting) {
       return { success: false, message: 'You already have an active credit card application under review.' };
@@ -701,11 +740,12 @@ export const BankingProvider: React.FC<{ children: React.ReactNode }> = ({ child
     const newApp: CardApplication = {
       id: `CRD-APP-${Math.floor(1000 + Math.random() * 9000)}`,
       customerId: currentCustomer.id,
-      customerName: currentCustomer.fullName,
+      customerName: details?.customerName || currentCustomer.fullName,
       accountNumber: accNo,
       cardType: 'credit',
       cardNetwork: network,
-      status: 'submitted',
+      reasonForApplying: reason?.trim() || 'Credit Card for Travel and E-Commerce Expenses',
+      status: 'pending',
       submittedAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
       deliveryAddress: address || currentCustomer.address,
@@ -714,11 +754,13 @@ export const BankingProvider: React.FC<{ children: React.ReactNode }> = ({ child
       employerName,
       requestedLimit,
       simulatedScore: finalScore,
+      declarationAccepted: true,
       remarks: `Automated assessment score: ${finalScore}/900. Submitted for underwriter review.`,
+      ...(details || {}),
     };
 
     setCardApplications(prev => [newApp, ...prev]);
-    return { success: true, message: 'Credit card application submitted successfully!' };
+    return { success: true, message: 'Credit card application submitted successfully! Status is now Pending.', applicationId: newApp.id };
   };
 
   // Admin Management Actions
@@ -761,6 +803,13 @@ export const BankingProvider: React.FC<{ children: React.ReactNode }> = ({ child
       balanceAfter: app.initialDeposit,
       date: new Date().toISOString().replace('T', ' ').slice(0, 19),
       description: 'Account Opening Deposit (Approved)',
+      senderAccount: 'BRANCH-OPENING-DESK',
+      senderName: 'Branch Cash Opening Counter',
+      recipientAccount: newAccNumber,
+      recipientName: app.customerName,
+      sourceOfMoney: 'Account Opening Cash / Cheque Tendered',
+      destinationOfMoney: `${app.accountType.toUpperCase()} Account (${newAccNumber})`,
+      channel: 'Cash Deposit',
       status: 'success',
       referenceNumber: `REF${Date.now().toString().slice(-10)}`,
     };
@@ -787,6 +836,24 @@ export const BankingProvider: React.FC<{ children: React.ReactNode }> = ({ child
           exp = '11/31';
         }
         logAudit('CARD_STATUS_UPDATE', 'card', appId, `Card application ${appId} status changed to ${status}. Remarks: ${remarks || ''}`);
+
+        // Dispatch in-app notification to the customer
+        const notifTitle = status === 'approved'
+          ? `Card Application Approved (${c.cardType.toUpperCase()})`
+          : status === 'rejected'
+          ? `Card Application Decision (${c.cardType.toUpperCase()})`
+          : `Card Application Updated: ${status.toUpperCase()}`;
+        const notifMsg = `Your ${c.cardNetwork} ${c.cardType} card application (${appId}) status is now ${status.toUpperCase()}.${remarks ? ` Remarks: ${remarks}` : ''}`;
+
+        setNotifications(nPrev => [{
+          id: `NOTIF-${Date.now()}`,
+          title: notifTitle,
+          message: notifMsg,
+          date: new Date().toISOString().replace('T', ' ').slice(0, 19),
+          read: false,
+          type: status === 'approved' ? 'success' : status === 'rejected' ? 'alert' : 'info'
+        }, ...nPrev]);
+
         return {
           ...c,
           status,

@@ -57,56 +57,59 @@ export const GovernmentSchemes: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* 1. Header Banner */}
-      <div className="bg-white rounded-2xl border border-slate-200/90 p-6 sm:p-7 shadow-xs flex flex-col lg:flex-row lg:items-center justify-between gap-6">
-        <div className="space-y-2">
-          <div className="flex items-center gap-2">
-            <span className="px-2.5 py-1 rounded-full bg-blue-50 text-[#002C6C] text-xs font-bold border border-blue-200 flex items-center gap-1.5">
-              <Landmark className="w-3.5 h-3.5 text-[#002C6C]" />
-              Official Government Welfare & Loan Assistance Portal
+      <div className="rounded-2xl bg-gradient-to-r from-[#002C6C] via-[#003B95] to-[#1E40AF] p-6 sm:p-8 text-white shadow-md flex flex-col lg:flex-row lg:items-center justify-between gap-6 relative overflow-hidden">
+        {/* Subtle decorative glow */}
+        <div className="absolute -right-16 -top-16 w-64 h-64 bg-white/10 rounded-full blur-2xl pointer-events-none" />
+        
+        <div className="space-y-3 relative z-10">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="px-3 py-1 rounded-full bg-amber-400 text-slate-900 text-xs font-bold flex items-center gap-1.5 shadow-xs">
+              <Landmark className="w-3.5 h-3.5 text-slate-900" />
+              Official Government Welfare & Loan Assistance Directory
             </span>
-            <span className="px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-800 text-[11px] font-semibold border border-emerald-200 flex items-center gap-1">
-              <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-              100% Direct Official Gov Links
+            <span className="px-3 py-1 rounded-full bg-white/15 text-white text-[11px] font-semibold backdrop-blur-xs flex items-center gap-1">
+              <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+              Direct Official .gov.in Links
             </span>
           </div>
 
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-[#142B4A] tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
             Government Schemes & Banking Loan Assistance
           </h1>
 
-          <p className="text-xs sm:text-sm text-slate-600 max-w-3xl leading-relaxed">
+          <p className="text-xs sm:text-sm text-blue-100 max-w-3xl leading-relaxed">
             Explore verified Central and Karnataka state government credit programs, subsidies, educational grants, and collateral-free MSME loans. Review eligibility criteria, required documents, step-by-step application instructions, and apply directly on official government websites.
           </p>
         </div>
 
         {/* Loan Finder & EMI Calculator Callout */}
-        <div className="shrink-0 flex flex-col sm:flex-row lg:flex-col gap-2">
+        <div className="shrink-0 flex flex-col sm:flex-row lg:flex-col gap-2 relative z-10">
           <button
             type="button"
             onClick={() => setActiveCustomerTab('loan_finder')}
-            className="flex items-center justify-center gap-2 px-5 py-3 text-xs font-bold text-white bg-[#002C6C] hover:bg-[#003B95] rounded-xl transition-all shadow-md hover:shadow-lg"
+            className="flex items-center justify-center gap-2 px-5 py-2.5 text-xs font-bold text-[#002C6C] bg-white hover:bg-blue-50 rounded-xl transition-all shadow-md cursor-pointer"
           >
-            <Sparkles className="w-4 h-4 text-amber-300" />
+            <Sparkles className="w-4 h-4 text-[#2563EB]" />
             <span>Smart Loan Finder & EMI Calculator</span>
           </button>
         </div>
       </div>
 
       {/* 2. Official Citizen Notice & Regulatory Safety Box */}
-      <div className="p-4 bg-amber-50 rounded-xl border border-amber-200 text-xs text-amber-900 flex items-start gap-3">
-        <AlertTriangle className="w-4 h-4 text-amber-700 shrink-0 mt-0.5" />
+      <div className="p-4 bg-amber-50/80 rounded-2xl border border-amber-200 text-xs text-amber-950 flex items-start gap-3">
+        <ShieldCheck className="w-5 h-5 text-amber-700 shrink-0 mt-0.5" />
         <div className="space-y-1">
-          <p className="font-bold text-slate-800">
-            Citizen Advisory & Zero-Intermediary Guarantee:
+          <p className="font-bold text-amber-900">
+            Zero-Intermediary Guarantee & Official Government Redirects:
           </p>
-          <p className="text-slate-600 text-[11px] leading-relaxed">
-            BankTM and Government of India never charge any middleman fees, commission, or processing charges for government scheme facilitation. All links provided below redirect strictly to verified official government portals (<code className="font-mono text-amber-900 font-bold">.gov.in</code>, <code className="font-mono text-amber-900 font-bold">.nic.in</code>, and apex state portals).
+          <p className="text-amber-800 text-[11px] leading-relaxed">
+            BankTM and Government of India never charge any middleman fees, commissions, or processing fees for government schemes. All links provided below redirect strictly to verified official government portals (<code className="font-mono text-amber-950 font-bold">.gov.in</code>, <code className="font-mono text-amber-950 font-bold">.nic.in</code>, and apex state portals).
           </p>
         </div>
       </div>
 
       {/* 3. Category Filter Tabs & Instant Search Bar */}
-      <div className="bg-white rounded-2xl border border-slate-200/90 p-4 shadow-xs space-y-4">
+      <div className="bg-white rounded-2xl border border-slate-200/90 p-5 shadow-xs space-y-4">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
           
           {/* Segmented Category Buttons */}
@@ -116,9 +119,9 @@ export const GovernmentSchemes: React.FC = () => {
                 key={cat.id}
                 type="button"
                 onClick={() => setSelectedCategory(cat.id)}
-                className={`px-3.5 py-2 text-xs font-semibold rounded-xl transition-all whitespace-nowrap cursor-pointer ${
+                className={`px-3 py-1.5 text-xs font-semibold rounded-xl transition-all whitespace-nowrap cursor-pointer ${
                   selectedCategory === cat.id
-                    ? 'bg-[#002C6C] text-white shadow-sm'
+                    ? 'bg-[#142B4A] text-white shadow-xs'
                     : 'bg-slate-100 text-slate-600 hover:text-slate-900 hover:bg-slate-200'
                 }`}
               >
@@ -129,13 +132,13 @@ export const GovernmentSchemes: React.FC = () => {
 
           {/* Search Input */}
           <div className="relative w-full lg:w-80">
-            <Search className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
+            <Search className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
             <input
               type="text"
               placeholder="Search scheme, loan amount, keyword..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-9 pr-4 py-2.5 text-xs border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#002C6C] bg-white text-slate-800"
+              className="w-full pl-9 pr-4 py-2 text-xs border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2563EB] bg-white text-slate-900"
             />
           </div>
         </div>
@@ -183,7 +186,7 @@ export const GovernmentSchemes: React.FC = () => {
               </div>
 
               {/* Loan / Subsidy Amount Banner (Highlight) */}
-              <div className="p-3.5 rounded-xl bg-linear-to-r from-emerald-50 to-teal-50 border border-emerald-200 flex items-start justify-between gap-3">
+              <div className="p-3.5 rounded-xl bg-gradient-to-r from-emerald-50 to-teal-50 border border-emerald-200 flex items-start justify-between gap-3">
                 <div className="space-y-0.5">
                   <span className="text-[10px] font-extrabold uppercase tracking-wider text-emerald-800 flex items-center gap-1">
                     <IndianRupee className="w-3 h-3 text-emerald-700" />
@@ -249,12 +252,11 @@ export const GovernmentSchemes: React.FC = () => {
               </div>
             </div>
 
-            {/* Actions: Full Dossier Modal & Direct Official Portal Redirect */}
             <div className="pt-4 border-t border-slate-100 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
               <button
                 type="button"
                 onClick={() => setSelectedScheme(scheme)}
-                className="text-xs font-bold text-[#002C6C] hover:text-[#003B95] hover:underline flex items-center gap-1 cursor-pointer"
+                className="text-xs font-bold text-[#2563EB] hover:text-blue-800 hover:underline flex items-center gap-1 cursor-pointer"
               >
                 <span>View Full Procedure & Dossier</span>
                 <ArrowRight className="w-3.5 h-3.5" />
@@ -264,11 +266,11 @@ export const GovernmentSchemes: React.FC = () => {
                 href={scheme.officialPortalUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2 px-4 py-2 text-xs font-bold text-white bg-[#002C6C] hover:bg-[#003B95] rounded-xl transition-all shadow-xs cursor-pointer"
+                className="flex items-center justify-center gap-2 px-4 py-2 text-xs font-bold text-white bg-[#142B4A] hover:bg-[#1E3A8A] rounded-xl transition-all shadow-xs cursor-pointer"
                 title={`Redirect to ${scheme.portalName || scheme.officialPortalUrl}`}
               >
                 <span>Apply on Official Portal</span>
-                <ExternalLink className="w-3.5 h-3.5" />
+                <ExternalLink className="w-3.5 h-3.5 text-amber-300" />
               </a>
             </div>
           </div>
@@ -280,9 +282,9 @@ export const GovernmentSchemes: React.FC = () => {
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-in fade-in duration-150">
           <div className="bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-3xl max-h-[90vh] overflow-y-auto p-6 sm:p-8 space-y-6 animate-in zoom-in-95 duration-150">
             {/* Modal Header */}
-            <div className="flex items-start justify-between gap-4 border-b border-slate-200 pb-4">
+            <div className="flex items-start justify-between gap-4 border-b border-slate-100 pb-4">
               <div>
-                <span className="text-[11px] font-bold text-[#002C6C] bg-blue-50 px-2.5 py-1 rounded-md border border-blue-200 uppercase tracking-wider">
+                <span className="text-[11px] font-bold text-[#002C6C] bg-blue-50 px-2.5 py-0.5 rounded-md border border-blue-200 uppercase tracking-wider font-mono">
                   {selectedScheme.categoryLabel}
                 </span>
                 <h3 className="text-xl sm:text-2xl font-extrabold text-[#142B4A] mt-2 leading-tight">
@@ -296,7 +298,7 @@ export const GovernmentSchemes: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setSelectedScheme(null)}
-                className="text-slate-400 hover:text-slate-700 text-xl font-bold p-1 rounded-lg hover:bg-slate-100"
+                className="text-slate-400 hover:text-slate-700 text-xl font-bold p-1 rounded-lg hover:bg-slate-100 cursor-pointer"
               >
                 ✕
               </button>
@@ -305,15 +307,15 @@ export const GovernmentSchemes: React.FC = () => {
             {/* Modal Content */}
             <div className="space-y-5 text-xs sm:text-sm">
               {/* Financial Benefit Banner */}
-              <div className="p-4 rounded-xl bg-linear-to-r from-emerald-50 to-teal-50 border border-emerald-200 space-y-1">
-                <span className="text-xs font-bold text-emerald-900 uppercase tracking-wider">
+              <div className="p-4 rounded-xl bg-gradient-to-r from-emerald-50 to-teal-50 border border-emerald-200 space-y-1">
+                <span className="text-xs font-bold text-emerald-800 uppercase tracking-wider">
                   Approved Benefit & Loan Details
                 </span>
-                <div className="text-base sm:text-lg font-extrabold text-emerald-950">
+                <div className="text-base sm:text-lg font-extrabold text-emerald-950 font-mono">
                   {selectedScheme.loanOrSubsidyAmount || selectedScheme.financialBenefits}
                 </div>
                 {selectedScheme.interestRateText && (
-                  <p className="text-xs text-emerald-800 font-medium">
+                  <p className="text-xs text-emerald-700 font-semibold">
                     Interest Terms: {selectedScheme.interestRateText}
                   </p>
                 )}
@@ -321,7 +323,7 @@ export const GovernmentSchemes: React.FC = () => {
 
               {/* Purpose & Overview */}
               <div>
-                <h4 className="font-bold text-slate-800 text-xs uppercase tracking-wider mb-1.5">
+                <h4 className="font-bold text-[#142B4A] text-xs uppercase tracking-wider mb-1.5">
                   Scheme Purpose & Scope
                 </h4>
                 <p className="text-slate-600 leading-relaxed">{selectedScheme.description}</p>
@@ -329,7 +331,7 @@ export const GovernmentSchemes: React.FC = () => {
 
               {/* Eligibility Criteria */}
               <div>
-                <h4 className="font-bold text-slate-800 text-xs uppercase tracking-wider mb-2">
+                <h4 className="font-bold text-[#142B4A] text-xs uppercase tracking-wider mb-2">
                   Comprehensive Eligibility Checklist
                 </h4>
                 <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-2">
@@ -344,13 +346,13 @@ export const GovernmentSchemes: React.FC = () => {
 
               {/* Step-by-Step Application Procedure */}
               <div>
-                <h4 className="font-bold text-slate-800 text-xs uppercase tracking-wider mb-2">
+                <h4 className="font-bold text-[#142B4A] text-xs uppercase tracking-wider mb-2">
                   Official Step-by-Step Application Procedure
                 </h4>
                 <div className="space-y-2 bg-blue-50/50 p-4 rounded-xl border border-blue-100">
                   {selectedScheme.applicationProcedure?.map((step, idx) => (
-                    <div key={idx} className="flex items-start gap-2 text-xs text-slate-800 leading-relaxed">
-                      <div className="w-5 h-5 rounded-full bg-[#002C6C] text-white flex items-center justify-center font-bold text-[10px] shrink-0 mt-0.5">
+                    <div key={idx} className="flex items-start gap-2.5 text-xs text-slate-700 leading-relaxed">
+                      <div className="w-5 h-5 rounded-full bg-[#2563EB] text-white flex items-center justify-center font-bold text-[10px] shrink-0 mt-0.5">
                         {idx + 1}
                       </div>
                       <span>{step}</span>
@@ -361,13 +363,13 @@ export const GovernmentSchemes: React.FC = () => {
 
               {/* Required Documents */}
               <div>
-                <h4 className="font-bold text-slate-800 text-xs uppercase tracking-wider mb-2">
+                <h4 className="font-bold text-[#142B4A] text-xs uppercase tracking-wider mb-2">
                   Mandatory Required Documents
                 </h4>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   {selectedScheme.requiredDocuments.map((doc, i) => (
                     <div key={i} className="p-2.5 bg-slate-50 text-slate-700 rounded-lg text-xs border border-slate-200 flex items-center gap-2">
-                      <FileText className="w-4 h-4 text-[#002C6C] shrink-0" />
+                      <FileText className="w-4 h-4 text-[#2563EB] shrink-0" />
                       <span>{doc}</span>
                     </div>
                   ))}
@@ -376,17 +378,17 @@ export const GovernmentSchemes: React.FC = () => {
 
               {/* Verification & Portal Metadata */}
               <div className="pt-3 border-t border-slate-100 text-xs text-slate-500 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                <span>Official Portal: <strong className="font-mono text-slate-700">{selectedScheme.portalName}</strong></span>
-                <span>Last Verified by BankTM Compliance: <strong>{selectedScheme.lastVerifiedDate}</strong></span>
+                <span>Official Portal: <strong className="font-mono text-[#002C6C]">{selectedScheme.portalName}</strong></span>
+                <span>Compliance Verified: <strong>{selectedScheme.lastVerifiedDate}</strong></span>
               </div>
             </div>
 
             {/* Modal Footer */}
-            <div className="pt-4 border-t border-slate-200 flex items-center justify-between gap-4">
+            <div className="pt-4 border-t border-slate-100 flex items-center justify-between gap-4">
               <button
                 type="button"
                 onClick={() => setSelectedScheme(null)}
-                className="px-5 py-2.5 text-xs font-semibold text-slate-600 hover:bg-slate-100 rounded-xl transition-colors"
+                className="px-5 py-2.5 text-xs font-semibold text-slate-600 hover:bg-slate-100 rounded-xl transition-colors cursor-pointer"
               >
                 Close Dossier
               </button>
@@ -395,10 +397,10 @@ export const GovernmentSchemes: React.FC = () => {
                 href={selectedScheme.officialPortalUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 px-6 py-2.5 text-xs font-bold text-white bg-[#002C6C] hover:bg-[#003B95] rounded-xl transition-all shadow-md"
+                className="flex items-center gap-2 px-6 py-2.5 text-xs font-bold text-white bg-[#142B4A] hover:bg-[#1E3A8A] rounded-xl transition-all shadow-md cursor-pointer"
               >
                 <span>Proceed to Official Government Portal</span>
-                <ExternalLink className="w-4 h-4" />
+                <ExternalLink className="w-4 h-4 text-amber-300" />
               </a>
             </div>
           </div>
