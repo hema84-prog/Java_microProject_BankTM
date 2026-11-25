@@ -11,6 +11,7 @@ import {
 import { useBanking } from '../../context/BankingContext';
 import { BankLogo } from '../common/BankLogo';
 import { LanguageSelector } from '../common/LanguageSelector';
+import communityHeroImg from '../../assets/images/banktm_community_hero.png';
 
 export const CustomerLogin: React.FC = () => {
   const { customerLogin, setAuthView, t } = useBanking();
@@ -46,14 +47,15 @@ export const CustomerLogin: React.FC = () => {
         <div className="relative z-10 my-6 space-y-5">
           <div className="rounded-2xl overflow-hidden border border-white/15 shadow-2xl bg-slate-900">
             <img 
-              src="/public/assets/aistudio/image_d2b1dd33.png" 
+              src="/assets/aistudio/image_d2b1dd33.png" 
               alt="BankTM Customer Banking – Empowering Women Citizens" 
               className="w-full aspect-[4/3] sm:aspect-[16/11] max-h-[440px] object-cover object-top"
               referrerPolicy="no-referrer"
               onError={(e) => {
-                const target = e.target as HTMLImageElement;
-                if (!target.src.includes('/src/assets/images/banktm_community_hero.png')) {
-                  target.src = '/src/assets/images/banktm_community_hero.png';
+                const target = e.currentTarget;
+                if (!target.dataset.fallbackApplied) {
+                  target.dataset.fallbackApplied = 'true';
+                  target.src = communityHeroImg;
                 }
               }}
             />

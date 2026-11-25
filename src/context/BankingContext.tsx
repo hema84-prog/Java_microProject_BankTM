@@ -158,11 +158,27 @@ const STORAGE_KEYS = {
   CURRENT_ROLE: 'banktm_role',
 };
 
+const safeReadStorage = <T,>(key: string, fallback: T, requireArray = false): T => {
+  try {
+    const saved = localStorage.getItem(key);
+    if (!saved) return fallback;
+    const parsed = JSON.parse(saved);
+    if (requireArray && !Array.isArray(parsed)) return fallback;
+    return (parsed ?? fallback) as T;
+  } catch {
+    return fallback;
+  }
+};
+
 export const BankingProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   // Localization
   const [language, setLanguageState] = useState<Language>(() => {
-    const saved = localStorage.getItem(STORAGE_KEYS.LANG);
-    return (saved as Language) || 'en';
+    try {
+      const saved = localStorage.getItem(STORAGE_KEYS.LANG);
+      return (saved as Language) || 'en';
+    } catch {
+      return 'en';
+    }
   });
 
   // Role and Auth view
@@ -175,58 +191,44 @@ export const BankingProvider: React.FC<{ children: React.ReactNode }> = ({ child
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   // Entities stored in state and localStorage
-  const [customers, setCustomers] = useState<CustomerUser[]>(() => {
-    const saved = localStorage.getItem(STORAGE_KEYS.CUSTOMERS);
-    return saved ? JSON.parse(saved) : INITIAL_CUSTOMERS;
-  });
+  const [customers, setCustomers] = useState<CustomerUser[]>(() =>
+    safeReadStorage(STORAGE_KEYS.CUSTOMERS, INITIAL_CUSTOMERS, true)
+  );
 
-  const [accounts, setAccounts] = useState<BankAccount[]>(() => {
-    const saved = localStorage.getItem(STORAGE_KEYS.ACCOUNTS);
-    return saved ? JSON.parse(saved) : INITIAL_ACCOUNTS;
-  });
+  const [accounts, setAccounts] = useState<BankAccount[]>(() =>
+    safeReadStorage(STORAGE_KEYS.ACCOUNTS, INITIAL_ACCOUNTS, true)
+  );
 
-  const [transactions, setTransactions] = useState<BankingTransaction[]>(() => {
-    const saved = localStorage.getItem(STORAGE_KEYS.TRANSACTIONS);
-    return saved ? JSON.parse(saved) : INITIAL_TRANSACTIONS;
-  });
+  const [transactions, setTransactions] = useState<BankingTransaction[]>(() =>
+    safeReadStorage(STORAGE_KEYS.TRANSACTIONS, INITIAL_TRANSACTIONS, true)
+  );
 
-  const [cardApplications, setCardApplications] = useState<CardApplication[]>(() => {
-    const saved = localStorage.getItem(STORAGE_KEYS.CARDS);
-    return saved ? JSON.parse(saved) : INITIAL_CARD_APPLICATIONS;
-  });
+  const [cardApplications, setCardApplications] = useState<CardApplication[]>(() =>
+    safeReadStorage(STORAGE_KEYS.CARDS, INITIAL_CARD_APPLICATIONS, true)
+  );
 
-  const [accountApplications, setAccountApplications] = useState<AccountApplication[]>(() => {
-    const saved = localStorage.getItem(STORAGE_KEYS.ACCOUNT_APPS);
-    return saved ? JSON.parse(saved) : INITIAL_ACCOUNT_APPLICATIONS;
-  });
+  const [accountApplications, setAccountApplications] = useState<AccountApplication[]>(() =>
+    safeReadStorage(STORAGE_KEYS.ACCOUNT_APPS, INITIAL_ACCOUNT_APPLICATIONS, true)
+  );
 
   const [schemes, setSchemes] = useState<GovernmentScheme[]>(() => {
-    const saved = localStorage.getItem(STORAGE_KEYS.SCHEMES);
-    if (saved) {
-      try {
-        const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed.some((s: any) => s.id === 'SCH-BIZ-003')) {
-          return parsed;
-        }
-      } catch {
-        // fallback
-      }
+    const parsed = safeReadStorage<GovernmentScheme[]>(STORAGE_KEYS.SCHEMES, [], true);
+    if (parsed.some((s: any) => s?.id === 'SCH-BIZ-003')) {
+      return parsed;
     }
     return INITIAL_SCHEMES;
   });
 
-  const [auditLogs, setAuditLogs] = useState<AuditLog[]>(() => {
-    const saved = localStorage.getItem(STORAGE_KEYS.AUDIT);
-    return saved ? JSON.parse(saved) : INITIAL_AUDIT_LOGS;
-  });
+  const [auditLogs, setAuditLogs] = useState<AuditLog[]>(() =>
+    safeReadStorage(STORAGE_KEYS.AUDIT, INITIAL_AUDIT_LOGS, true)
+  );
 
   const [notifications, setNotifications] = useState<NotificationItem[]>(INITIAL_NOTIFICATIONS);
 
   // Active Sessions
-  const [currentCustomer, setCurrentCustomer] = useState<CustomerUser | null>(() => {
-    const saved = localStorage.getItem(STORAGE_KEYS.CURRENT_CUST);
-    return saved ? JSON.parse(saved) : null;
-  });
+  const [currentCustomer, setCurrentCustomer] = useState<CustomerUser | null>(() =>
+    safeReadStorage<CustomerUser | null>(STORAGE_KEYS.CURRENT_CUST, null)
+  );
 
   const [currentAdmin, setCurrentAdmin] = useState<AdminUser | null>(null);
   const [selectedAccountNumber, setSelectedAccountNumber] = useState<string>('');

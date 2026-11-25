@@ -17,7 +17,9 @@ import { Language } from '../../types';
 
 export const CustomerSettings: React.FC = () => {
   const { 
+    currentRole,
     currentCustomer, 
+    currentAdmin,
     updateCustomerPassword, 
     language, 
     setLanguage, 
@@ -25,12 +27,14 @@ export const CustomerSettings: React.FC = () => {
     t 
   } = useBanking();
 
-  const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [passwordMessage, setPasswordMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+  const [confirmReset, setConfirmReset] = useState(false);
 
-  if (!currentCustomer) return null;
+  const isAdminSession = currentRole === 'admin' && !!currentAdmin;
+
+  if (!currentCustomer && !isAdminSession) return null;
 
   const handlePasswordChange = (e: React.FormEvent) => {
     e.preventDefault();
@@ -45,7 +49,6 @@ export const CustomerSettings: React.FC = () => {
     }
     updateCustomerPassword(newPassword);
     setPasswordMessage({ type: 'success', text: 'Password successfully updated!' });
-    setCurrentPassword('');
     setNewPassword('');
     setConfirmPassword('');
   };
@@ -54,10 +57,12 @@ export const CustomerSettings: React.FC = () => {
     <div className="space-y-6 max-w-4xl">
       <div>
         <h2 className="text-xl font-bold text-[#142B4A]">
-          {t.settingsTitle}
+          {isAdminSession ? 'Administrator Settings' : t.settingsTitle}
         </h2>
         <p className="text-xs text-slate-500 mt-0.5">
-          Manage your BankTM profile credentials, language preference, and security
+          {isAdminSession
+            ? 'Manage administrator session details, portal language, and system state'
+            : 'Manage your BankTM profile credentials, language preference, and security'}
         </p>
       </div>
 
@@ -65,36 +70,71 @@ export const CustomerSettings: React.FC = () => {
         {/* Profile Information */}
         <div className="bg-white rounded-xl border border-slate-200/90 p-6 shadow-xs space-y-4">
           <div className="flex items-center gap-2 border-b border-slate-100 pb-3">
-            <User className="w-4 h-4 text-[#2563EB]" />
-            <h3 className="font-bold text-sm text-[#142B4A]">{t.navMyProfile}</h3>
+            {isAdminSession ? (
+              <ShieldCheck className="w-4 h-4 text-[#2563EB]" />
+            ) : (
+              <User className="w-4 h-4 text-[#2563EB]" />
+            )}
+            <h3 className="font-bold text-sm text-[#142B4A]">
+              {isAdminSession ? 'Administrator Profile' : t.navMyProfile}
+            </h3>
           </div>
 
-          <div className="space-y-3 text-xs">
-            <div className="flex justify-between py-1.5 border-b border-slate-100">
-              <span className="text-slate-500">Customer Identification Number</span>
-              <span className="font-mono font-bold text-slate-800">{currentCustomer.id}</span>
+          {isAdminSession && currentAdmin ? (
+            <div className="space-y-3 text-xs">
+              <div className="flex justify-between py-1.5 border-b border-slate-100">
+                <span className="text-slate-500">Administrator ID</span>
+                <span className="font-mono font-bold text-slate-800">{currentAdmin.id}</span>
+              </div>
+              <div className="flex justify-between py-1.5 border-b border-slate-100">
+                <span className="text-slate-500">Officer Name</span>
+                <span className="font-semibold text-slate-800">{currentAdmin.fullName}</span>
+              </div>
+              <div className="flex justify-between py-1.5 border-b border-slate-100">
+                <span className="text-slate-500">Terminal Username</span>
+                <span className="font-mono text-slate-700">{currentAdmin.username}</span>
+              </div>
+              <div className="flex justify-between py-1.5 border-b border-slate-100">
+                <span className="text-slate-500">Official Email</span>
+                <span className="text-slate-800">{currentAdmin.email}</span>
+              </div>
+              <div className="flex justify-between py-1.5 border-b border-slate-100">
+                <span className="text-slate-500">Access Privilege</span>
+                <span className="font-mono uppercase text-emerald-700 font-semibold">{currentAdmin.role}</span>
+              </div>
+              <div className="flex justify-between py-1.5">
+                <span className="text-slate-500">Session Timestamp</span>
+                <span className="font-mono text-slate-700">{currentAdmin.lastLogin}</span>
+              </div>
             </div>
-            <div className="flex justify-between py-1.5 border-b border-slate-100">
-              <span className="text-slate-500">Full Legal Name</span>
-              <span className="font-semibold text-slate-800">{currentCustomer.fullName}</span>
+          ) : currentCustomer ? (
+            <div className="space-y-3 text-xs">
+              <div className="flex justify-between py-1.5 border-b border-slate-100">
+                <span className="text-slate-500">Customer Identification Number</span>
+                <span className="font-mono font-bold text-slate-800">{currentCustomer.id}</span>
+              </div>
+              <div className="flex justify-between py-1.5 border-b border-slate-100">
+                <span className="text-slate-500">Full Legal Name</span>
+                <span className="font-semibold text-slate-800">{currentCustomer.fullName}</span>
+              </div>
+              <div className="flex justify-between py-1.5 border-b border-slate-100">
+                <span className="text-slate-500">Registered Username</span>
+                <span className="font-mono text-slate-700">{currentCustomer.username}</span>
+              </div>
+              <div className="flex justify-between py-1.5 border-b border-slate-100">
+                <span className="text-slate-500">Email Address</span>
+                <span className="text-slate-800">{currentCustomer.email}</span>
+              </div>
+              <div className="flex justify-between py-1.5 border-b border-slate-100">
+                <span className="text-slate-500">Mobile Phone</span>
+                <span className="font-mono text-slate-800">{currentCustomer.mobile}</span>
+              </div>
+              <div className="py-1.5">
+                <span className="text-slate-500 block mb-1">Permanent Residential Address</span>
+                <span className="text-slate-700 leading-relaxed block">{currentCustomer.address}</span>
+              </div>
             </div>
-            <div className="flex justify-between py-1.5 border-b border-slate-100">
-              <span className="text-slate-500">Registered Username</span>
-              <span className="font-mono text-slate-700">{currentCustomer.username}</span>
-            </div>
-            <div className="flex justify-between py-1.5 border-b border-slate-100">
-              <span className="text-slate-500">Email Address</span>
-              <span className="text-slate-800">{currentCustomer.email}</span>
-            </div>
-            <div className="flex justify-between py-1.5 border-b border-slate-100">
-              <span className="text-slate-500">Mobile Phone</span>
-              <span className="font-mono text-slate-800">{currentCustomer.mobile}</span>
-            </div>
-            <div className="py-1.5">
-              <span className="text-slate-500 block mb-1">Permanent Residential Address</span>
-              <span className="text-slate-700 leading-relaxed block">{currentCustomer.address}</span>
-            </div>
-          </div>
+          ) : null}
         </div>
 
         {/* Language Preferences */}
@@ -130,60 +170,62 @@ export const CustomerSettings: React.FC = () => {
           </div>
         </div>
 
-        {/* Change Password */}
-        <div className="bg-white rounded-xl border border-slate-200/90 p-6 shadow-xs space-y-4">
-          <div className="flex items-center gap-2 border-b border-slate-100 pb-3">
-            <KeyRound className="w-4 h-4 text-[#2563EB]" />
-            <h3 className="font-bold text-sm text-[#142B4A]">{t.changePassword}</h3>
+        {/* Change Password (Customer Only) */}
+        {!isAdminSession && (
+          <div className="bg-white rounded-xl border border-slate-200/90 p-6 shadow-xs space-y-4">
+            <div className="flex items-center gap-2 border-b border-slate-100 pb-3">
+              <KeyRound className="w-4 h-4 text-[#2563EB]" />
+              <h3 className="font-bold text-sm text-[#142B4A]">{t.changePassword}</h3>
+            </div>
+
+            {passwordMessage && (
+              <div className={`p-3 rounded-lg text-xs flex items-center gap-2 ${
+                passwordMessage.type === 'success' ? 'bg-emerald-50 text-emerald-800' : 'bg-red-50 text-red-800'
+              }`}>
+                {passwordMessage.type === 'success' ? <CheckCircle2 className="w-4 h-4" /> : <AlertCircle className="w-4 h-4" />}
+                <span>{passwordMessage.text}</span>
+              </div>
+            )}
+
+            <form onSubmit={handlePasswordChange} className="space-y-3">
+              <div>
+                <label className="block text-xs font-semibold text-slate-700 mb-1">
+                  {t.newPassword}
+                </label>
+                <input
+                  type="password"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                  required
+                  className="w-full px-3 py-2 text-xs border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2563EB]"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-slate-700 mb-1">
+                  {t.confirmPassword}
+                </label>
+                <input
+                  type="password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  required
+                  className="w-full px-3 py-2 text-xs border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2563EB]"
+                />
+              </div>
+
+              <button
+                type="submit"
+                className="px-5 py-2 text-xs font-semibold text-white bg-[#142B4A] hover:bg-[#1f3f6b] rounded-lg transition-colors shadow-xs"
+              >
+                {t.updatePassword}
+              </button>
+            </form>
           </div>
-
-          {passwordMessage && (
-            <div className={`p-3 rounded-lg text-xs flex items-center gap-2 ${
-              passwordMessage.type === 'success' ? 'bg-emerald-50 text-emerald-800' : 'bg-red-50 text-red-800'
-            }`}>
-              {passwordMessage.type === 'success' ? <CheckCircle2 className="w-4 h-4" /> : <AlertCircle className="w-4 h-4" />}
-              <span>{passwordMessage.text}</span>
-            </div>
-          )}
-
-          <form onSubmit={handlePasswordChange} className="space-y-3">
-            <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">
-                {t.newPassword}
-              </label>
-              <input
-                type="password"
-                value={newPassword}
-                onChange={(e) => setNewPassword(e.target.value)}
-                required
-                className="w-full px-3 py-2 text-xs border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2563EB]"
-              />
-            </div>
-
-            <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">
-                {t.confirmPassword}
-              </label>
-              <input
-                type="password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                required
-                className="w-full px-3 py-2 text-xs border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2563EB]"
-              />
-            </div>
-
-            <button
-              type="submit"
-              className="px-5 py-2 text-xs font-semibold text-white bg-[#142B4A] hover:bg-[#1f3f6b] rounded-lg transition-colors shadow-xs"
-            >
-              {t.updatePassword}
-            </button>
-          </form>
-        </div>
+        )}
 
         {/* 24x7 Support & Helpline */}
-        <div className="bg-white rounded-xl border border-slate-200/90 p-6 shadow-xs space-y-4">
+        <div className={`bg-white rounded-xl border border-slate-200/90 p-6 shadow-xs space-y-4 ${isAdminSession ? 'lg:col-span-2' : ''}`}>
           <div className="flex items-center gap-2 border-b border-slate-100 pb-3">
             <HelpCircle className="w-4 h-4 text-[#2563EB]" />
             <h3 className="font-bold text-sm text-[#142B4A]">{t.customerSupport}</h3>
@@ -212,20 +254,39 @@ export const CustomerSettings: React.FC = () => {
               </div>
             </div>
 
-            <div className="pt-2 flex justify-between items-center text-[11px] text-slate-400 border-t border-slate-100">
+            <div className="pt-2 flex flex-wrap justify-between items-center gap-2 text-[11px] text-slate-400 border-t border-slate-100">
               <span>{t.simulatedNotice}</span>
-              <button
-                type="button"
-                onClick={() => {
-                  if (confirm('Reset simulated database back to fresh default demo data?')) {
-                    resetAllData();
-                  }
-                }}
-                className="text-red-600 hover:underline flex items-center gap-1 font-medium"
-              >
-                <RotateCcw className="w-3 h-3" />
-                <span>Reset Demo State</span>
-              </button>
+              {confirmReset ? (
+                <div className="flex items-center gap-2">
+                  <span className="text-red-600 font-semibold">Reset all data?</span>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setConfirmReset(false);
+                      resetAllData();
+                    }}
+                    className="px-2.5 py-1 rounded bg-red-600 text-white font-semibold hover:bg-red-700"
+                  >
+                    Confirm
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setConfirmReset(false)}
+                    className="px-2.5 py-1 rounded border border-slate-200 text-slate-600 hover:bg-slate-100"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => setConfirmReset(true)}
+                  className="text-red-600 hover:underline flex items-center gap-1 font-medium"
+                >
+                  <RotateCcw className="w-3 h-3" />
+                  <span>Reset Demo State</span>
+                </button>
+              )}
             </div>
           </div>
         </div>

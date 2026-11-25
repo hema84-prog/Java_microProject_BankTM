@@ -18,6 +18,7 @@ import { useBanking } from '../../context/BankingContext';
 import { BankLogo } from '../common/BankLogo';
 import { LanguageSelector } from '../common/LanguageSelector';
 import { speakText, stopSpeech } from '../../utils/speech';
+import communityHeroImg from '../../assets/images/banktm_community_hero.png';
 
 export const WelcomeScreen: React.FC = () => {
   const { 
@@ -233,14 +234,15 @@ export const WelcomeScreen: React.FC = () => {
               <div className="rounded-xl overflow-hidden border-2 border-amber-300/60 shadow-2xl bg-slate-900">
                 <div className="relative w-full aspect-[16/10] sm:aspect-[21/11] max-h-[280px] overflow-hidden">
                   <img 
-                    src="/public/assets/aistudio/image_d2b1dd33.png" 
+                    src="/assets/aistudio/image_d2b1dd33.png" 
                     alt="Indian Women Citizens Empowered by Digital Banking and Government Schemes" 
                     className="w-full h-full object-cover object-top"
                     referrerPolicy="no-referrer"
                     onError={(e) => {
-                      const target = e.target as HTMLImageElement;
-                      if (!target.src.includes('/src/assets/images/banktm_community_hero.png')) {
-                        target.src = '/src/assets/images/banktm_community_hero.png';
+                      const target = e.currentTarget;
+                      if (!target.dataset.fallbackApplied) {
+                        target.dataset.fallbackApplied = 'true';
+                        target.src = communityHeroImg;
                       }
                     }}
                   />
